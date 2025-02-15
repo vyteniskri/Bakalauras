@@ -1,0 +1,6 @@
+@Connect2Game_HostAddress = http://localhost:5186
+
+GET {{Connect2Game_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
