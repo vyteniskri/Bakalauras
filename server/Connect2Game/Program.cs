@@ -35,7 +35,7 @@ builder.Services.AddSingleton<AzureBlobServiceVideos>();
 
 builder.Services.Configure<AzureStorageSettings>(options =>
 {
-    options.ConnectionString = Environment.GetEnvironmentVariable("AZURE_STORAGE_CONNECTION_STRING");
+    options.ConnectionString = builder.Configuration.GetValue<string>("AzureStorage:ConnectionString");
 });
 
 
