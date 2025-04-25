@@ -2,58 +2,76 @@ import React from "react";
 import { Text, View } from "react-native";
 import Icon from "./Icon";
 import { ProfileItemT } from "../types";
-import styles, { DARK_GRAY, WHITE } from "../assets/styles";
+import styles, { DARK_GRAY } from "../assets/styles";
+import OptionalCategory from "./OptionalCategory";
 
 const ProfileItem = ({
-  age,
   info1,
   info2,
   info3,
   info4,
-  location,
-  matches,
+  info5,
+  aboutMe,
   name,
-}: ProfileItemT) => (
-  <View style={styles.containerProfileItem}>
+  userId,
+  width = 320,
+}: ProfileItemT & { userId?: string; width?: string | number }) => (
+  <View
+    style={[
+      styles.containerProfileItem,
+      { width }, 
+    ]}
+  >
     <View style={styles.matchesProfileItem}>
-      <Text style={styles.matchesTextProfileItem}>
-        <Icon name="heart" size={13} color={WHITE} /> {matches}% Match!
-      </Text>
+      <Text style={styles.matchesTextProfileItem}>{name}</Text>
     </View>
-
-    <Text style={styles.name}>{name}</Text>
-
-    <Text style={styles.descriptionProfileItem}>
-      {age} - {location}
-    </Text>
+    <View style={styles.descriptionContainer}>
+      <Text style={styles.descriptionProfileItem}>{aboutMe}</Text>
+    </View>
 
     <View style={styles.info}>
       <Text style={styles.iconProfile}>
-        <Icon name="person" size={12} color={DARK_GRAY} />
+        <Icon name="game-controller" size={14} color={DARK_GRAY} />
       </Text>
       <Text style={styles.infoContent}>{info1}</Text>
     </View>
 
     <View style={styles.info}>
       <Text style={styles.iconProfile}>
-        <Icon name="pizza" size={12} color={DARK_GRAY} />
+        <Icon name="calendar" size={14} color={DARK_GRAY} />
       </Text>
       <Text style={styles.infoContent}>{info2}</Text>
     </View>
 
     <View style={styles.info}>
       <Text style={styles.iconProfile}>
-        <Icon name="airplane" size={12} color={DARK_GRAY} />
+        <Icon name="person" size={14} color={DARK_GRAY} />
       </Text>
       <Text style={styles.infoContent}>{info3}</Text>
     </View>
 
     <View style={styles.info}>
       <Text style={styles.iconProfile}>
-        <Icon name="calendar" size={12} color={DARK_GRAY} />
+        <Icon type="MaterialCommunityIcons" name="gamepad-variant" size={14} color={DARK_GRAY} />
       </Text>
       <Text style={styles.infoContent}>{info4}</Text>
     </View>
+
+    <View style={styles.fullRow}>
+      <Text style={styles.centeredText}>Favorite Game of All Time</Text>
+
+      <View style={styles.info}>
+        <View style={styles.itemList}>
+          {Array.isArray(info5) &&
+            info5.map((filter, index) => (
+              <View key={index} style={styles.item}>
+                <Text style={styles.itemText}>{filter}</Text>
+              </View>
+            ))}
+        </View>
+      </View>
+    </View>
+    <OptionalCategory userId={userId} />
   </View>
 );
 

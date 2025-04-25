@@ -27,7 +27,8 @@ export type ProfileItemT = {
   info2?: string;
   info3?: string;
   info4?: string;
-  location?: string;
+  info5?: Array<string>;
+  aboutMe?: string;
   matches: string;
   name: string;
 };
@@ -36,20 +37,71 @@ export type TabBarIconT = {
   focused: boolean;
   iconName: any;
   text: string;
+  typ: string;
 };
 
-export type DataT = {
-  id: number;
-  name: string;
-  isOnline: boolean;
-  match: string;
-  description: string;
-  message: string;
-  image: any;
-  age?: string;
-  info1?: string;
-  info2?: string;
-  info3?: string;
-  info4?: string;
-  location?: string;
+export type ProfileT = {
+  onContentHeightChange?: (height: number) => void;
+  id: string;
+  username: string;
+  relatedInfo?: {
+    title: string;
+    description: string;
+    photos: Array<{
+      filePath: string; id: number 
+    }>; 
+    videos: Array<{
+      filePath: string; id: number 
+    }>; 
+  } | null;
+  parentCategory?: Array<{
+    id: number;
+    title: string;
+    description: string;
+    parentCattegforyId: string;
+    relatedInfo?: Array<{
+      id: string;
+      title: string; 
+      description: string;
+      photos?: Array<{
+        filePath: string; id: number 
+      }>; 
+      videos?: Array<{
+        filePath: string; id: number 
+      }>; 
+    }>;
+    childCategory?: Array<{
+      id: number;
+      title: string;
+      description: string;
+      relatedInfo?: Array<{
+        id: string;
+        title: string; 
+        description: string;
+        photos?: Array<{
+          filePath: string; id: number 
+        }>; 
+        videos?: Array<{
+          filePath: string; id: number 
+        }>; 
+      }>;
+      childChildCategory?: Array<{
+        id: number;
+        title: string;
+        description: string;
+        parentCattegforyId: string;
+        relatedInfo?: Array<{
+          id: string;
+          title: string; 
+          description: string;
+          photos?: Array<{
+            filePath: string; id: number 
+          }>; 
+          videos?: Array<{
+            filePath: string; id: number 
+          }>; 
+        }> | null;
+      }> | null;
+    }> | null;
+  }> | null; 
 };

@@ -5,7 +5,7 @@ import styles from "../assets/styles";
 
 const Message = ({ image, lastMessage, name }: MessageT) => (
   <View style={styles.containerMessage}>
-    <Image source={image} style={styles.avatar} />
+    <Image source={{uri: image}} style={styles.avatar} />
     <View>
       <Text>{name}</Text>
       <Text style={styles.message}>{lastMessage}</Text>
