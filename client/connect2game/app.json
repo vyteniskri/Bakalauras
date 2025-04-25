@@ -1,14 +1,15 @@
 {
   "expo": {
-    "name": "tinder-expo",
-    "slug": "tinder-expo",
+    "name": "MatchToGame",
+    "slug": "MatchToGame",
+    "scheme": "MatchToGame",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon":  "./assets/LogoWithoutBackGround.png",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/LogoWithoutBackGround.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#7444C0"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -21,9 +22,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
+        "foregroundImage": "./assets/LogoWithoutBackGround.png",
+        "backgroundColor": "#7444C0"
+      },
+      "package": "com.anonymous.tinderexpo"
     },
     "web": {
       "favicon": "./assets/favicon.png"
