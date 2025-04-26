@@ -79,7 +79,6 @@ const AvatarIntro = ({ navigation, route }: { navigation: any; route: any }) => 
 
       navigation.navigate('PlatformIntro', { step: 3 }); 
     } catch (err) {
-      console.error('Error:', err);
      Alert.alert('Please try again');
 
      navigation.navigate('Login');

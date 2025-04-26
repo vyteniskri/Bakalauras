@@ -7,7 +7,7 @@ import { BLACK, PRIMARY_COLOR, SECONDARY_COLOR, WHITE } from "../assets/styles";
 import { Icon } from "../components";
 import * as ImagePicker from 'expo-image-picker';
 
-const SIGNALR_URL = "http://10.0.2.2:5186/api/chatHub";
+const SIGNALR_URL = "https://coral-app-oyqdq.ondigitalocean.app/api/chatHub";
 
 const MessagingScreen = ({ route }: { route: any }) => {
   const { friendshipId, isBanned } = route.params;
@@ -114,7 +114,6 @@ const MessagingScreen = ({ route }: { route: any }) => {
         setSelectedPhoto(photo.uri); 
       } 
     } catch (error) {
-      console.error("Error picking photo:", error);
     }
   };
 
@@ -128,7 +127,6 @@ const MessagingScreen = ({ route }: { route: any }) => {
         await connection.invoke("DeleteMessage", friendshipId, messageId);
       }
     } catch (error) {
-      console.error("Error deleting message:", error);
     } finally {
       setEditing(false); 
       setLongPressTriggered(false); 
@@ -153,7 +151,6 @@ const MessagingScreen = ({ route }: { route: any }) => {
             const photo = photoResponse.data; 
             return { ...message, photo: photo || null }; 
           } catch (error) {
-            console.error(`Error fetching photo for message ${message.id}:`, error);
             return { ...message, photo: null }; 
           }
         })
@@ -224,7 +221,6 @@ const MessagingScreen = ({ route }: { route: any }) => {
 
   const sendMessage = async () => {
     if (!connection || connection.state !== "Connected") {
-      console.error("SignalR connection is not active. Cannot send message.");
       return;
     }
   
@@ -292,7 +288,6 @@ const MessagingScreen = ({ route }: { route: any }) => {
           scrollToStart();
         }
       } catch (error) {
-        console.error("Error sending or editing message:", error);
       } finally {
         setSending(false);
       
@@ -351,7 +346,6 @@ const MessagingScreen = ({ route }: { route: any }) => {
                               viewPosition: 0.8,
                             });
                           } catch (error) {
-                            console.error("Error scrolling to index:", error);
                           }
                         }
                       }}
@@ -368,7 +362,6 @@ const MessagingScreen = ({ route }: { route: any }) => {
                               viewPosition: 0.8, 
                             });
                           } catch (error) {
-                            console.error("Error scrolling to index:", error);
                           }
                         }
                       }}

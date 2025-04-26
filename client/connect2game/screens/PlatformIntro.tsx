@@ -47,7 +47,6 @@ const PlatformIntro = ({ navigation, route }: { navigation: any; route: any }) =
         const filtersData = await Promise.all(filterPromises);
         setFilters(filtersData);
       } catch (error) {
-        console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
@@ -96,7 +95,6 @@ const PlatformIntro = ({ navigation, route }: { navigation: any; route: any }) =
       navigation.navigate('SelectCategoriesIntro', { step: 4 });
     } catch (error) {
       navigation.navigate('Login');
-      console.error('Error posting selected items:', error);
       Alert.alert('Please try again');
     }
   };

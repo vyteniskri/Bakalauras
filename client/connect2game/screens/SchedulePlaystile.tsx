@@ -81,7 +81,6 @@ const SchedulePlaystile = ({ navigation, route }: { navigation: any; route: any 
         const filtersPlayStyleData = await Promise.all(filterPromisesPlayStyle);
         setFiltersPlayStyle(filtersPlayStyleData);
       } catch (error) {
-        console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
@@ -164,7 +163,6 @@ const SchedulePlaystile = ({ navigation, route }: { navigation: any; route: any 
       navigation.navigate('MediaIntro', { step: 6 });
     } catch (error) {
       navigation.navigate('Login');
-      console.error('Error posting selected items:', error);
       Alert.alert('Please try again');
     }
   };

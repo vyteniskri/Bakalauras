@@ -68,7 +68,7 @@ const FriendsMessages = ({ userId, navigation }: { userId: string, navigation: a
           try {
             additionalData = await fetchProfileData(profileId);
           } catch (error) {
-            console.error(`Error fetching profile data for profile ID: ${profileId}`, error);
+           
             return null; 
           }
 
@@ -118,7 +118,7 @@ const FriendsMessages = ({ userId, navigation }: { userId: string, navigation: a
         setHasMore(false);
       }
     } catch (error) {
-      console.error("Error fetching friends:", error);
+
     } finally {
       setLoading(false);
       setLoadingMore(false);
@@ -161,7 +161,7 @@ const FriendsMessages = ({ userId, navigation }: { userId: string, navigation: a
       );
       setSearchResultsFriends(friendsOnly);
     } catch (error) {
-      console.error("Error searching profiles:", error);
+
     } finally {
      
     }
@@ -189,7 +189,7 @@ const FriendsMessages = ({ userId, navigation }: { userId: string, navigation: a
       setSearchResultsFriends([]);
       return updatedProfile; 
     } catch (error) {
-      console.error("Error appending profile to list:", error);
+  
       return profile;
     } 
   };

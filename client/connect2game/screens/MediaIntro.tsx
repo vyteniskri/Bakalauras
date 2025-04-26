@@ -91,7 +91,7 @@ const MediaIntro = ({ navigation, route }: { navigation: any; route: any }) => {
         updatedVideos[index] = videoUri;
         setVideos(updatedVideos);
       } catch (error) {
-        console.error('Error checking file size:', error);
+
         Alert.alert('Error', 'Failed to verify file size.');
       }
     }
@@ -163,7 +163,7 @@ const MediaIntro = ({ navigation, route }: { navigation: any; route: any }) => {
       
       navigation.navigate("GameIntro", { step: 7 });
     } catch (err) {
-      console.error('Error:', err);
+
      
         if (err.response) {
           if (err.response.status === 401) {
@@ -192,7 +192,6 @@ const MediaIntro = ({ navigation, route }: { navigation: any; route: any }) => {
       navigation.navigate('GameIntro', { step: 7 });
     } catch (error) {
       navigation.navigate('Login');
-      console.error('Error posting selected items:', error);
       Alert.alert('Please try again');
     }
   };

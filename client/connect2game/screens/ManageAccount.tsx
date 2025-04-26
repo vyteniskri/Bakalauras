@@ -20,7 +20,7 @@ const ManageAccount = ({ navigation, onAccountUpdate }: { navigation: any; onAcc
       if (error.response?.status === 404) {
         Alert.alert("Error", "Profile not found.");
       } else {
-        console.error("Error deleting profile:", error);
+
         Alert.alert("Error", "An unexpected error occurred.");
       }
     }

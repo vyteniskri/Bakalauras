@@ -123,7 +123,6 @@ const Edit = ({ navigation, route }: { navigation: any; route: any }) => {
           });
         }
       } catch (error) {
-        console.error("Error fetching informationField:", error);
       }
     };
     
@@ -228,7 +227,6 @@ const Edit = ({ navigation, route }: { navigation: any; route: any }) => {
         setSelectedMainPhoto(result.assets[0].uri); 
       }
     } catch (error) {
-      console.error("Error selecting main photo:", error);
       Alert.alert("Error", "Failed to select the main photo. Please try again.");
     }
   };
@@ -288,7 +286,6 @@ useEffect(() => {
           setUserNameCopy(profileInfo.data.username);
         }
       } catch (error) {
-        console.error("Error fetching videos:", error);
       }
     };
 
@@ -327,7 +324,6 @@ useEffect(() => {
   
         uploadVideo(index, videoUri);
       } catch (error) {
-        console.error('Error checking file size:', error);
         Alert.alert('Error', 'Failed to verify file size.');
       }
     }
@@ -349,7 +345,6 @@ useEffect(() => {
           setVideos(fetchedVideos);
         }
       } catch (error) {
-        console.error("Error fetching videos:", error);
       }
     };
 
@@ -538,7 +533,6 @@ useEffect(() => {
           setPhotos(otherPhotos);
         }
       } catch (error) {
-        console.error("Error fetching photos:", error);
       }
     };
   
@@ -587,10 +581,7 @@ useEffect(() => {
                           visibilityState: isVisible, 
                         };
                       } catch (error) {
-                        console.error(
-                          `Error fetching visibility for SubCategory ID ${subCategory.id}:`,
-                          error
-                        );
+                    
                         return {
                           ...subCategory,
                           visibilityState: false, 
@@ -604,10 +595,7 @@ useEffect(() => {
                   subCategories: subCategoriesWithVisibility,
                 };
               } catch (error) {
-                console.error(
-                  `Error fetching subcategories for Category ID ${category.id}:`,
-                  error
-                );
+               
                 return { ...category, subCategories: [] };
               }
             })
@@ -732,10 +720,7 @@ useEffect(() => {
                   subCategoryFilterTitle: selectedSubCategory.title,
                 };
               } catch (error) {
-                console.error(
-                  `Error fetching filter details for Filter ID ${subCategoryFilter.foreignKeyFilterId}:`,
-                  error
-                );
+               
                 return null; 
               }
             })
@@ -815,10 +800,7 @@ useEffect(() => {
               subCategoryFilterTitle: subCategory.title, 
             };
           } catch (error) {
-            console.error(
-              `Error fetching filter details for Filter ID ${subCategoryFilter.foreignKeyFilterId}:`,
-              error
-            );
+           
             return null; 
           }
         })
@@ -843,7 +825,7 @@ useEffect(() => {
     
       setFilters(updatedFilters); 
     } catch (error) {
-      console.error("Error fetching filters:", error);
+
     } finally {
       setLoadingMoreFilters(false); 
       setLoadingFilters(false);
@@ -971,7 +953,7 @@ useEffect(() => {
 
       }
     } catch (error) {
-      console.error("Error updating filters in the database:", error);
+    
     }
   };
 

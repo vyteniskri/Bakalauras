@@ -46,7 +46,6 @@ const Profile = ({ navigation, onLogoutSuccess }: { navigation: any; onLogoutSuc
           setRefreshKey((prevKey) => prevKey + 1); 
           setCurrentMediaIndex(0); 
         } catch (error) {
-          console.error("Error fetching user ID or profile data:", error);
         } finally {
           setLoading(false); 
         }

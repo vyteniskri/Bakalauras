@@ -72,7 +72,6 @@ const OptionalCategory = ({ userId }: { userId?: string }) => {
             setGroupedFilters(groupedFilters);
           }
         } catch (error) {
-          console.error("Error fetching profile data:", error);
         } finally {
           setLoading(false); 
         }
