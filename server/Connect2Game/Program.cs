@@ -23,7 +23,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("http://10.0.2.2:8081", "http://10.0.2.2:8082", "https://coral-app-oyqdq.ondigitalocean.app").AllowCredentials().AllowAnyHeader().AllowAnyMethod(); ///AllowCredentials() added ///ANDROID: http://10.0.2.2:8081
+        policy.WithOrigins("http://10.0.2.2:8081", "http://10.0.2.2:8082", "https://matchtogamecontrol.netlify.app").AllowCredentials().AllowAnyHeader().AllowAnyMethod(); ///AllowCredentials() added ///ANDROID: http://10.0.2.2:8081
 
 
     });
