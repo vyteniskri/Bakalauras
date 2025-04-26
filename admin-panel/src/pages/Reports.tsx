@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../services/api";
 
 const Reports = () => {
@@ -293,7 +293,7 @@ const Reports = () => {
               return (
                 <tr key={report.id}>
                   <td>{report.id}</td>
-                  <td>{report.banTime != "0001-01-01T00:00:00+00:00" ? new Date(report.banTime).toLocaleString() : "-"}</td> 
+                  <td>{report.banTime !== "0001-01-01T00:00:00+00:00" ? new Date(report.banTime).toLocaleString() : "-"}</td> 
                   <td>{report.flaggedCount}</td>
                   <td>{new Date(report.creationDate).toLocaleString()}</td> 
                   <td>
