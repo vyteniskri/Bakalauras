@@ -40,12 +40,12 @@ function App() {
 
   return (
     <Router>
+       {isAuthenticated != null && isAuthenticated && <NavBar />}
       <Routes>
         <Route path="/reset-password" element={<ResetPassword />} />
         
         {isAuthenticated != null && isAuthenticated ? (
           <>
-            <NavBar />
             <Route path="/" element={<Reports />} />
             <Route path="/history" element={<History />} />
             <Route path="/logout" element={<Logout setIsAuthenticated={setIsAuthenticated} />} />
@@ -57,7 +57,7 @@ function App() {
         ) : (
           <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
         )}
-        <Route path="*" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+        <Route path="/" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
       </Routes>
     </Router>
   );
