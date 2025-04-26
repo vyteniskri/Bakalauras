@@ -40,7 +40,6 @@ const GameIntro = ({ navigation, route, onLoginSuccess }: { navigation: any; rou
         const subCategoryResponse = await axiosInstance.get('/subCategories2/Title/Favorite Game of All Time');
         setSubCategory(subCategoryResponse.data);
       } catch (error) {
-        console.error('Error fetching subcategory:', error);
         Alert.alert('Error', 'Failed to fetch subcategory.');
       } 
     };
@@ -107,10 +106,7 @@ const GameIntro = ({ navigation, route, onLoginSuccess }: { navigation: any; rou
                   subCategoryFilterTitle: subCategory.title,
                 };
               } catch (error) {
-                console.error(
-                  `Error fetching filter details for Filter ID ${subCategoryFilter.foreignKeyFilterId}:`,
-                  error
-                );
+               
                 return null; 
               }
             })
@@ -135,7 +131,7 @@ const GameIntro = ({ navigation, route, onLoginSuccess }: { navigation: any; rou
         if (error.response && error.response.status === 404) {
           setHasMoreFilters(false);
         } else {
-          console.error("Error fetching filters:", error);
+         
           Alert.alert('Error', 'Failed to fetch filters.');
         }
       } finally {
@@ -189,7 +185,7 @@ const GameIntro = ({ navigation, route, onLoginSuccess }: { navigation: any; rou
       await AsyncStorage.setItem("userId", userId);
       onLoginSuccess();
     } catch (error) {
-      console.error('Error posting selected items:', error);
+ 
        Alert.alert('Please try again');
        navigation.navigate('Login');
     }

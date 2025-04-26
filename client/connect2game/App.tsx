@@ -58,7 +58,6 @@ const App = () => {
 
         setToken(storedToken);
       } catch (error) {
-        console.error("Failed to retrieve token:", error);
       } finally {
         setLoading(false);
       }

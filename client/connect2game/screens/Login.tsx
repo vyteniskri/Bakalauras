@@ -40,7 +40,7 @@ const Login = ({ navigation, route, onLoginSuccess }: { navigation: any; route: 
         "Check your email" 
       );
     } catch (error) {
-      console.error("Error sending password reset email:", error);
+
       Alert.alert("Error", "Failed to send password reset email. Please try again.");
     } finally {
       setIsLoading(false); 
@@ -172,11 +172,11 @@ const Login = ({ navigation, route, onLoginSuccess }: { navigation: any; route: 
 
                   navigation.navigate("AboutIntro");
                 } catch (postError) {
-                  console.error("Error initializing registration step:", postError);
+
                   Alert.alert("Error", "Failed to initialize registration step. Please try again.");
                 }
               } else {
-                console.error("Error fetching registration step:", error);
+
                 Alert.alert("Error", "Unable to verify registration step. Please try again.");
               }
             }

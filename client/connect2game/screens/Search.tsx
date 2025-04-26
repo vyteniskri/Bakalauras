@@ -51,7 +51,6 @@ const Search = () => {
         setHasMore(false); 
       }
     } catch (error) {
-      console.error("Error fetching filters:", error);
     } finally {
       setIsLoading(false);
     }

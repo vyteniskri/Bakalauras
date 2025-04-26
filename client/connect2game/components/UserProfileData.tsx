@@ -59,7 +59,6 @@ export const fetchProfileData = async (userId: string) => {
 
       combinedMedia = [...sortedPhotos, ...sortedVideos];
     } catch (error) {
-      console.warn("No videos found or error fetching videos:", error);
     }
 
 
@@ -149,7 +148,6 @@ export const fetchProfileData = async (userId: string) => {
       },
     };
   } catch (error) {
-    console.error("Error fetching profile data:", error);
     throw error; 
   }
 };

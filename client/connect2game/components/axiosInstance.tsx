@@ -61,8 +61,6 @@ const getAccessToken = async (): Promise<string | null> => {
         }
         return null;
       } catch (error: any) {
-        console.error("Error refreshing access token:", error.response?.data || error.message);
-        console.error("Error refreshing access token:", error.response?.status);
         if (error.response?.status === 422) {
           Alert.alert("Session Expired", "Please log in again.");
           await AsyncStorage.clear(); 
@@ -137,7 +135,6 @@ axiosInstance.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return axiosInstance(originalRequest);
       } catch (refreshError) {
-        console.error("Token refresh failed:", refreshError);
 
         isRefreshing = false;
         refreshSubscribers = [];

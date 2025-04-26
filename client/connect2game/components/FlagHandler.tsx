@@ -33,11 +33,9 @@ const FlagHandler: React.FC<FlagHandlerProps> = ({ userId }) => {
             setIsFlagged(true); 
           }
         } catch (incrementError) {
-          console.error("Error incrementing flag count:", incrementError);
           Alert.alert("Error", "Failed to increment the flag count. Please try again.");
         }
       } else {
-        console.error("Error flagging profile:", error);
         Alert.alert("Error", "Failed to flag the profile. Please try again.");
       }
     } finally {

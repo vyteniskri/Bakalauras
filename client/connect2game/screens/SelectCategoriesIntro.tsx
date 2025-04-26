@@ -48,7 +48,6 @@ const SelectCategoriesIntro = ({ navigation, route }: { navigation: any; route: 
         const filtersData = await Promise.all(filterPromises);
         setFilters(filtersData);
       } catch (error) {
-        console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
@@ -97,7 +96,6 @@ const SelectCategoriesIntro = ({ navigation, route }: { navigation: any; route: 
       navigation.navigate('SchedulePlaystile', { step: 5 });
     } catch (error) {
       navigation.navigate('Login');
-      console.error('Error posting selected items:', error);
       Alert.alert('Please try again');
     }
   };
@@ -113,7 +111,6 @@ const SelectCategoriesIntro = ({ navigation, route }: { navigation: any; route: 
       navigation.navigate('SchedulePlaystile', { step: 5 });
     } catch (error) {
       navigation.navigate('Login');
-      console.error('Error posting selected items:', error);
       Alert.alert('Please try again');
     }
   };

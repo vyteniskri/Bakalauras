@@ -39,7 +39,6 @@ const fetchProfiles = async (timesLooped: number = 0) => {
             const additionalData = await fetchProfileData(profile.id);
             return { ...profile, ...additionalData };
           } catch (error) {
-            console.error(`Error fetching additional data for profile ${profile.id}:`, error);
             return null; 
           }
         })
@@ -60,7 +59,6 @@ const fetchProfiles = async (timesLooped: number = 0) => {
 
     setLoading(false);
   } catch (error) {
-    console.error("Error fetching profiles:", error);
     setLoading(false); 
   }
 };

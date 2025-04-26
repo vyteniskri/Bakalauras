@@ -155,7 +155,6 @@ const Matches = ({ navigation }: { navigation: any }) => {
                   fetchCurrentFriends(Math.max(0, pageCurrentFriends - 1));
                   setOptionsVisible(false);
                 } catch (error) {
-                  console.error("Error removing friend:", error);
                 }
               },
             },
@@ -222,7 +221,6 @@ const Matches = ({ navigation }: { navigation: any }) => {
         setLoadingWhole1(false);
         setHasMoreCurrentFriends(false);
       } else {
-        console.error("Error fetching current friends:", error);
       }
     } finally {
       setLoadingCurrentFriends(false);
@@ -282,7 +280,6 @@ const Matches = ({ navigation }: { navigation: any }) => {
         setHasMorePendingFriends(false);
         setLoadingWhole2(false);
       } else {
-        console.error("Error fetching pending friends:", error);
       }
     } finally {
       setLoadingPendingFriends(false);
@@ -441,7 +438,6 @@ const Matches = ({ navigation }: { navigation: any }) => {
         setSearchResultsFriends([]);
         setSearchResultsNonFriends([]);
       } catch (error) {
-        console.error("Error appending profile to list:", error);
       } finally {
         setSearching(false); 
       }

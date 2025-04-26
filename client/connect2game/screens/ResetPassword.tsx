@@ -34,7 +34,6 @@ const ResetPassword = ({ route, navigation }: { route: any; navigation: any }) =
       Alert.alert("Success", response.data.message);
       navigation.navigate("Login"); 
     } catch (error) {
-      console.error("Error resetting password:", error);
       Alert.alert("Error", "Failed to reset password. Please try again.");
     }
   };
