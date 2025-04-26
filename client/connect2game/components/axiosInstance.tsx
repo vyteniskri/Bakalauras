@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {jwtDecode} from "jwt-decode";
 import { Alert } from "react-native";
 
-const API_BASE_URL = "http://10.0.2.2:5186/api";
+const API_BASE_URL = "https://coral-app-oyqdq.ondigitalocean.app/api";
 let isRefreshing = false;
 let refreshPromise: Promise<string | null> | null = null; 
 let refreshSubscribers: ((token: string) => void)[] = [];
