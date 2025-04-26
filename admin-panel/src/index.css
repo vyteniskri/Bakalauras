@@ -1,0 +1,294 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Container for the entire layout */
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+/* Left Section: Reports Table */
+.reports-table {
+  width: 66.66%;
+  padding: 16px;
+  overflow-y: auto;
+  border-right: 1px solid #ccc;
+}
+
+.reports-table .title {
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+}
+
+.reports-table .table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.reports-table th,
+.reports-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.reports-table th {
+  background-color: #f4f4f4;
+}
+
+/* Right Section: User Profile */
+.user-profile {
+  width: 33.33%;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.user-profile .title {
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+}
+
+.info-section,
+.photos-section,
+.videos-section {
+  margin-top: 16px;
+}
+
+.photos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.photos-grid img {
+  width: 100%;
+  height: auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Buttons */
+.btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.btn-ban {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.btn-remove {
+  background-color: #95a5a6;
+  color: white;
+}
+
+.btn-view {
+  background-color: #3498db;
+  color: white;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.videos-section {
+  margin-top: 16px;
+}
+
+.videos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.video-item {
+  width: 100%;
+  height: auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.subcategory-item {
+  margin-left: 20px; /* Indent subcategories to the right */
+}
+.ban-duration-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-duration {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-duration:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.btn-permanent {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-permanent:hover {
+  background-color: #a71d2a;
+  transform: scale(1.05);
+}
+
+.btn-cancel {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-cancel:hover {
+  background-color: #5a6268;
+  transform: scale(1.05);
+}
+
+/* Pagination Container */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+/* General Button Styles */
+.pagination-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+}
+
+/* Previous Button */
+.pagination-btn-prev {
+  background-color: #007bff; /* Blue */
+}
+
+.pagination-btn-prev:hover {
+  background-color: #0056b3; /* Darker Blue */
+}
+
+/* Next Button */
+.pagination-btn-next {
+  background-color: #28a745; /* Green */
+}
+
+.pagination-btn-next:hover {
+  background-color: #218838; /* Darker Green */
+}
+
+/* Disabled Button */
+.pagination-btn:disabled {
+  background-color: #d6d6d6; /* Gray */
+  cursor: not-allowed;
+}
+
+/* Pagination Info */
+.pagination-info {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+.loading-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+}
+
+.loading-indicator h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+
+.reset-password-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.submit-button {
+  padding: 12px 20px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
