@@ -58,6 +58,7 @@ function App() {
       ) : (
         <Routes>
           <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+          <Route path="*" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
         </Routes>
       )}
     </Router>
