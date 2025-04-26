@@ -9,7 +9,7 @@ namespace Connect2Game.Auth
     {
         public static void AddResetPassord(this WebApplication app)
         {
-            app.MapPost("api/forgotpassword", async (UserManager<Profile> userManager, ForgotPasswordDto dto, EmailService emailService) =>
+            app.MapPost("/api/forgotpassword", async (UserManager<Profile> userManager, ForgotPasswordDto dto, EmailService emailService) =>
             {
                 var user = await userManager.FindByEmailAsync(dto.Email);
                 if (user == null)
@@ -19,7 +19,7 @@ namespace Connect2Game.Auth
 
                 var token = await userManager.GeneratePasswordResetTokenAsync(user);
 
-                var resetUrl = $"http://localhost:3000/reset-password?token={Uri.EscapeDataString(token)}&email={Uri.EscapeDataString(user.Email)}";
+                var resetUrl = $"https://matchtogamecontrol.netlify.app/reset-password?token={Uri.EscapeDataString(token)}&email={Uri.EscapeDataString(user.Email)}";
 
                 var body = $"<p>Click here to reset your password:</p><p><a href=\"{resetUrl}\">Reset Password</a></p>";
                 await emailService.SendEmailAsync(user.Email, "Password Reset", body);
@@ -28,7 +28,7 @@ namespace Connect2Game.Auth
             });
 
 
-            app.MapPost("api/resetpassword", async (UserManager<Profile> userManager, ResetPasswordDto dto) =>
+            app.MapPost("/api/resetpassword", async (UserManager<Profile> userManager, ResetPasswordDto dto) =>
             {
                 var user = await userManager.FindByEmailAsync(dto.Email);
                 if (user == null)
