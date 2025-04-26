@@ -7,7 +7,7 @@ import { Matches, Profile, Login, Introduction, Register, HomeTemplate, AboutInt
 import { PRIMARY_COLOR, DARK_GRAY, WHITE } from "./assets/styles";
 import TabBarIcon from "./components/TabBarIcon";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { View, Text, TouchableOpacity, ActivityIndicator, Image, KeyboardAvoidingView, Platform, Linking } from "react-native";
+import { View, Text, TouchableOpacity, ActivityIndicator, Image, KeyboardAvoidingView, Platform, Linking, LogBox } from "react-native";
 import { OptionalCategory, FloatingSearchBar } from "./components";
 import { setNavigation } from "./components/axiosInstance";
 
@@ -17,6 +17,8 @@ import { NavigationContainerRef } from "@react-navigation/native";
 import PreviewWrapper from "./components/Preview";
 import MannageAccount from "./screens/ManageAccount";
 
+
+LogBox.ignoreAllLogs(true);
 const navigationRef = createRef<NavigationContainerRef<{}>>();
 const App = () => {
   const [token, setToken] = useState<string | null>(null);
