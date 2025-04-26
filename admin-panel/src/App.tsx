@@ -40,29 +40,28 @@ function App() {
 
   return (
     <Router>
-      {isAuthenticated != null && isAuthenticated ? (
-        <>
-          <NavBar />
-          <Routes>
-            <Route path="/reset-password" element={<ResetPassword/>} />
+      <Routes>
+        <Route path="/reset-password" element={<ResetPassword />} />
+        
+        {isAuthenticated != null && isAuthenticated ? (
+          <>
+            <NavBar />
             <Route path="/" element={<Reports />} />
             <Route path="/history" element={<History />} />
             <Route path="/logout" element={<Logout setIsAuthenticated={setIsAuthenticated} />} />
-            {userRoles === "Admin" && (
-              <Route path="/RemoveProfiles" element={<RemoveProfiles/>} 
-              />
-            )}
             
-          </Routes>
-        </>
-      ) : (
-        <Routes>
+            {userRoles === "Admin" && (
+              <Route path="/RemoveProfiles" element={<RemoveProfiles />} />
+            )}
+          </>
+        ) : (
           <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
-          <Route path="*" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
-        </Routes>
-      )}
+        )}
+        <Route path="*" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+      </Routes>
     </Router>
   );
+  
 }
 
 export default App;
