@@ -262,7 +262,7 @@ const RemoveProfiles = () => {
                 <h3>Photos</h3>
                 <div className="photos-grid">
                   {selectedUserProfile.photos.map((photo: any) => (
-                    <img key={photo.id} src={photo.filePath} alt={`Photo ${photo.number}`} />
+                    <img key={photo.id} src={photo.filePath} alt={`Bad`} />
                   ))}
                 </div>
               </div>

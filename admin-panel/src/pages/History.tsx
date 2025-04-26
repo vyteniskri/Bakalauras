@@ -6,7 +6,6 @@ const History = () => {
   const [selectedUserProfile, setSelectedUserProfile] = useState<any | null>(null);
   const [filters, setFilters] = useState<any[]>([]); 
   const [loadingFilters, setLoadingFilters] = useState(false); 
-  const [userRoles, setUserRole] = useState<string | null>(null); 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const reportsPerPage = 5;
@@ -28,11 +27,6 @@ const History = () => {
       setPage(false);
     }
   };
-
-  useEffect(() => {
-    const roles = localStorage.getItem("Role");
-    setUserRole(roles);
-  }, []);
 
   useEffect(() => {
     fetchReports(currentPage, false);
@@ -199,7 +193,6 @@ const History = () => {
           </thead>
           <tbody>
             {reports.map((report: any) => {
-              const isBanned = report.banTime && new Date(report.banTime) > new Date(); 
               return (
                 <tr key={report.id}>
                   <td>{report.id}</td>
