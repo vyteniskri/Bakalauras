@@ -95,7 +95,7 @@ const Login = ({ navigation, route, onLoginSuccess }: { navigation: any; route: 
       Alert.alert("Can't login", "Please fill in both fields");
       return;
     }
-  
+    await AsyncStorage.removeItem("temporaryAccessToken");
     try {
       const response = await axiosInstance.post(
         "/login",

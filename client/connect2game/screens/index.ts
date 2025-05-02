@@ -5,7 +5,6 @@ export { default as Register } from "./Register";
 export { default as Introduction } from "./Introduction";
 export { default as HomeTemplate } from "./HomeTemplate";
 export { default as AboutIntro } from "./AboutIntro";
-export { default as UserNameIntro } from "./UserNameIntro";
 export { default as MediaIntro } from "./MediaIntro";
 export { default as SelectCategoriesIntro } from "./SelectCategoriesIntro";
 export { default as AvatarIntro } from "./AvatarIntro";

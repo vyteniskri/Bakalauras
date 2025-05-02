@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Matches, Profile, Login, Introduction, Register, HomeTemplate, AboutIntro, 
   MediaIntro, SelectCategoriesIntro, AvatarIntro, PlatformIntro, SchedulePlaystile, GameIntro, Edit, Search, FilteredProfiles, FriendsMessages, Messaging, ResetPassword } from "./screens";
-import { PRIMARY_COLOR, DARK_GRAY, WHITE } from "./assets/styles";
+import { PRIMARY_COLOR, DARK_GRAY, WHITE, BLACK } from "./assets/styles";
 import TabBarIcon from "./components/TabBarIcon";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { View, Text, TouchableOpacity, ActivityIndicator, Image, KeyboardAvoidingView, Platform, Linking, LogBox } from "react-native";
@@ -25,32 +25,6 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0); 
 
-  useEffect(() => {
-    const handleDeepLink = (event: { url: string }) => {
-      const url = event.url;
-      const parsedUrl = new URL(url);
-      const token = parsedUrl.searchParams.get("token");
-      const email = parsedUrl.searchParams.get("email");
-
-      if (token && email) {
-        navigationRef.current?.navigate("ResetPassword", { token, email });
-      }
-    };
-
-    Linking.addEventListener("url", handleDeepLink);
-
-    Linking.getInitialURL().then((url) => {
-      if (url) {
-        handleDeepLink({ url });
-      }
-    });
-
-    const subscription = Linking.addEventListener("url", handleDeepLink);
-
-    return () => {
-      subscription.remove();
-    };
-  }, []);
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -257,7 +231,10 @@ const App = () => {
                           previewImages={[require("./preview/Profile.png")]}
                           previewText={
                             <Text>
-                              Express yourself and create the coolest looking gamer account. <Text style={{ fontWeight: "bold", color: PRIMARY_COLOR }}>Join Now!</Text>
+                              Express yourself and create the coolest looking gamer account.
+                              <Text style={{ fontWeight: "bold", color: BLACK }}> Anonymity </Text>
+                              <Text style={{ fontWeight: "bold"}}>is key 🤫.</Text>
+                              <Text style={{ fontWeight: "bold", color: PRIMARY_COLOR }}> Join Now!</Text>
                             </Text>
                           }
                         >

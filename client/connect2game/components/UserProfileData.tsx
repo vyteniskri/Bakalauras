@@ -134,6 +134,10 @@ export const fetchProfileData = async (userId: string) => {
       );
     }
 
+    if (categoryData.platform.length === 0 || categoryData.allTimeGame.length === 0) {
+      throw new Error("Platform information is missing.");
+    }
+
     return {
       userId,
       userName,
