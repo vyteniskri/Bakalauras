@@ -5,9 +5,9 @@
     "scheme": "MatchToGame",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon":  "./assets/LogoWithoutBackGround.png",
+    "icon": "./assets/LogoWithoutBackGround2Small.png",
     "splash": {
-      "image": "./assets/LogoWithoutBackGround.png",
+      "image": "./assets/LogoWithoutBackGround2Small.png",
       "resizeMode": "cover",
       "backgroundColor": "#7444C0"
     },
@@ -18,11 +18,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.tinderexpo",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/LogoWithoutBackGround.png",
+        "foregroundImage": "./assets/LogoWithoutBackGround2Small.png",
         "backgroundColor": "#7444C0"
       },
       "package": "com.anonymous.tinderexpo"
@@ -30,6 +34,11 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "newArchEnabled": true
+    "newArchEnabled": true,
+    "extra": {
+      "eas": {
+        "projectId": "f42803ac-4498-4772-8dde-4ab569650a4a"
+      }
+    }
   }
 }

@@ -81,6 +81,14 @@ const getAccessToken = async (): Promise<string | null> => {
 
 axiosInstance.interceptors.request.use(
   async (config) => {
+
+    const temporaryAccessToken = await AsyncStorage.getItem("temporaryAccessToken");
+
+    if (temporaryAccessToken) {
+      config.headers.Authorization = `Bearer ${temporaryAccessToken}`;
+      return config;
+    }
+
     const accessToken = await AsyncStorage.getItem("accessToken");
 
     if (accessToken) {

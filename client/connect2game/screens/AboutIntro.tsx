@@ -82,6 +82,15 @@ const AboutIntro = ({ navigation }: { navigation: any }) => {
             maxLength={500}
           />
           <Text style={styles.charCount}>{text.length}/500</Text>
+             <View style={{ alignItems: 'flex-start', width: '100%'}}>
+              <Text style={{ fontWeight: 'bold' }}>Reminder:</Text>
+              <Text>
+                <Text style={{ fontStyle: 'italic' }}>
+                  Stay anonymous. Don't share real names, phone numbers, or social media accounts. 
+                </Text>
+                <Text style={{ fontStyle: 'normal' }}>😉</Text>
+              </Text>
+             </View>
              <View style={styles.footer}>
             <TouchableOpacity style={styles.button} onPress={handleSubmit} disabled={loading}>
               <Text style={styles.buttonText}>Next</Text>

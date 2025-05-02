@@ -112,6 +112,7 @@ const Profile = ({ navigation, onLogoutSuccess }: { navigation: any; onLogoutSuc
   }
 
   const handleAccountManagement = () => {
+    closeMenu();
     navigation.navigate("ManageAccount"); 
   }
 

@@ -22,7 +22,7 @@ const Welcome = ({ navigation }: { navigation: any }) => {
     <View style={[styles.introductioncontainer]}>
     <Animated.View style={[styles.introductioncontent, { opacity: fadeAnim }]}>
       <Text style={styles.introductiontitle}>MatchToGame</Text>
-      <Text style={styles.introductionsubtitle}>Find your perfect gaming friend</Text>
+      <Text style={styles.introductionsubtitle}>Keep your identity secret and find your perfect gaming friend </Text>
       <TouchableOpacity style={styles.introductionbutton} onPress={() => navigation.navigate("Login")}>
         <Text style={styles.introductionbuttonText}>Login</Text>
       </TouchableOpacity>
