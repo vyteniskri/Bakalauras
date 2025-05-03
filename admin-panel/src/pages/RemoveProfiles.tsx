@@ -17,7 +17,7 @@ const RemoveProfiles = () => {
 
     } catch (error) {
       console.error("Error invalidating sessions:", error);
-      alert("Failed to invalidate user sessions.");
+     // alert("Failed to invalidate user sessions.");
     }
   };
 
