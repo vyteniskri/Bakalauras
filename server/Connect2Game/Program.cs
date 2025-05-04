@@ -84,13 +84,21 @@ app.MapHub<ChatHub>("/api/chatHub");
 using var scope = app.Services.CreateScope();
 
 var dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
-dbContext.Database.Migrate();
+//Pakeiciau
+if (dbContext.Database.IsRelational())
+{
+    dbContext.Database.Migrate();
+}
+//Pakeiciau
+if (dbContext.Database.IsRelational())
+{
+    var dbSeeder = scope.ServiceProvider.GetRequiredService<AuthSeeder>();
+    await dbSeeder.SeedAsync();
 
-var dbSeeder = scope.ServiceProvider.GetRequiredService<AuthSeeder>();
-await dbSeeder.SeedAsync();
+    var dbSeeder2 = scope.ServiceProvider.GetRequiredService<Seeder>();
+    await dbSeeder2.SeedAsync();
+}
 
-var dbSeeder2 = scope.ServiceProvider.GetRequiredService<Seeder>();
-await dbSeeder2.SeedAsync();
 
 
 app.AddAuthApi();
@@ -220,3 +228,5 @@ public record SubCategoryProfileDto(int Id, int ForeignKeySubcategory2, String U
 public record ReportDto(int Id, DateTimeOffset BanTime, int FlaggedCount, String UserId, DateTimeOffset CreationDate);
 public record UpdateReportDto(DateTimeOffset BanTime);
 public record CreateReportDto(DateTimeOffset BanTime, int FlaggedCount);
+
+public partial class Program { }

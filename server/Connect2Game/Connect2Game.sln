@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Connect2Game", "Connect2Game.csproj", "{BE736D2E-FE2F-438A-9578-DF2EBF4CC4EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Connect2Game", "Connect2Game.csproj", "{BE736D2E-FE2F-438A-9578-DF2EBF4CC4EE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6193EAB5-849E-4C28-BF2C-7A20F70634B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -27,7 +27,7 @@ namespace Connect2Game.Endpoints
 
                 if (subCategory == null )
                 {
-                    Results.NotFound();
+                    return Results.NotFound();
                 }
 
                 var subCategoryProfile = new SubCategoryProfile { CreationDate = DateTimeOffset.UtcNow, ForeignKeySubcategory2 = subCategory, UserId = httpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub), Profile = profile };

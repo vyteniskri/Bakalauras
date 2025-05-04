@@ -34,9 +34,17 @@ namespace Connect2Game.Model
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("PostgreSQL"));
+            // Configure the database only if options are not already configured (e.g., in tests)
+            if (!optionsBuilder.IsConfigured && _configuration != null)
+            {
+                optionsBuilder.UseNpgsql(_configuration.GetConnectionString("PostgreSQL"));
+            }
         }
 
+        //// Add this constructor for testing with DbContextOptions
+        //public ApiDbContext(DbContextOptions<ApiDbContext> options) : base(options)
+        //{
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

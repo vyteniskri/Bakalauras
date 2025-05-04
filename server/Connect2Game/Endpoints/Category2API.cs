@@ -33,6 +33,11 @@ namespace Connect2Game.Endpoints
                     .Select(c => c.ToDto())
                     .ToListAsync();
 
+                if (!categories.Any())
+                {
+                    return Results.NotFound();
+                }
+
                 return Results.Ok(categories);
             });
 
