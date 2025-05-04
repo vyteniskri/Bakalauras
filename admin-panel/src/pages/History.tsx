@@ -297,7 +297,6 @@ const History = () => {
                           <ul>
                             {detailedFilters.map((filter: any, index: number) => (
                               <li key={index}>
-                                <p>ID: {filter.id}</p>
                                 <p>Text: {filter.text}</p>
                               </li>
                             ))}
