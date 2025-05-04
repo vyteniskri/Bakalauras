@@ -36,7 +36,7 @@ namespace Connect2Game.Endpoints
 
                 if (filters == null)
                 {
-                    Results.NotFound();
+                    return Results.NotFound();
                 }
 
                 return Results.Ok(filters.ToDto());

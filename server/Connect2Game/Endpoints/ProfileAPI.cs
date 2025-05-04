@@ -192,7 +192,7 @@ namespace Connect2Game.Endpoints
                         filteredUsers.Add(user);
                     }
                 }
-
+             
                 var totalProfiles = await userManager.Users.CountAsync();
 
                 var profileDtos = filteredUsers
