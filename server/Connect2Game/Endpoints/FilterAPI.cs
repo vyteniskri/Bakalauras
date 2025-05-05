@@ -47,19 +47,21 @@ namespace Connect2Game.Endpoints
             {
                 var filters = await dbContext.subCategoriesFilter
                     .Where(scf => scf.ForeignKeySubcategory2Id == categoryId &&
-                                  scf.ForeignKeyFilter.Text.ToLower().Contains(text.ToLower()))
-                    .OrderByDescending(scf => scf.ForeignKeyFilter.Text.ToLower() == text.ToLower()) 
-                    .ThenBy(scf => scf.ForeignKeyFilter.Text.ToLower().IndexOf(text.ToLower()))
-                    .ThenBy(scf => scf.ForeignKeyFilter.Text) 
-                    .Select(scf => new
-                    {
-                        SubCategoryFilterId = scf.Id, 
-                        Filter = scf.ForeignKeyFilter.ToDto() 
-                    })
-                    .Distinct()
-                    .Skip(offset) 
-                    .Take(limit)  
-                    .ToListAsync();
+                        scf.ForeignKeyFilter.Text.ToLower().Contains(text.ToLower()))
+                     .OrderByDescending(scf => scf.ForeignKeyFilter.Text.ToLower() == text.ToLower()) 
+                     .ThenBy(scf => scf.ForeignKeyFilter.Text.Length) 
+                     .ThenBy(scf => scf.ForeignKeyFilter.Text.ToLower().IndexOf(text.ToLower())) 
+                     .ThenBy(scf => scf.ForeignKeyFilter.Text) 
+                     .Select(scf => new
+                     {
+                         SubCategoryFilterId = scf.Id,
+                         Filter = scf.ForeignKeyFilter.ToDto()
+                     })
+                     .Distinct()
+                     .Skip(offset)
+                     .Take(limit)
+                     .ToListAsync();
+
 
                 var result = filters.Select(f => new
                 {
