@@ -46,44 +46,44 @@ namespace Connect2Game.Endpoints
             filters.MapGet("/filters/subcategoryFilter/{categoryId}/search/{text}", async (ApiDbContext dbContext, string text, int categoryId, int limit = 50, int offset = 0) =>
             {
 
-                var normalizedSearchTerm = NormalizeSearchTerm(text);
+                var rawWords = text
+                    .ToLower()
+                    .Replace("'", "")          
+                    .Replace("’", "")         
+                    .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                    .ToList();
 
-                // Fetch and filter the filters from the database
-                var filters = await dbContext.subCategoriesFilter
-                    .Where(scf => scf.ForeignKeySubcategory2Id == categoryId)
-                    .Where(scf => EF.Functions.Like(NormalizeSearchTerm(scf.ForeignKeyFilter.Text), $"%{normalizedSearchTerm}%"))
-                    .OrderByDescending(scf => EF.Functions.Like(NormalizeSearchTerm(scf.ForeignKeyFilter.Text), $"%{normalizedSearchTerm}%"))
+
+                var query = dbContext.subCategoriesFilter
+                    .Where(scf => scf.ForeignKeySubcategory2Id == categoryId);
+
+
+                foreach (var word in rawWords)
+                {
+                    query = query.Where(scf => EF.Functions.Like(
+                        scf.ForeignKeyFilter.Text.ToLower(), $"%{word}%"));
+                }
+
+                var sortedQuery = query
+                    .OrderByDescending(scf => scf.ForeignKeyFilter.Text.ToLower() == text.ToLower())
                     .ThenBy(scf => scf.ForeignKeyFilter.Text.Length)
-                    .ThenBy(scf => NormalizeSearchTerm(scf.ForeignKeyFilter.Text).IndexOf(normalizedSearchTerm))
+                    .ThenBy(scf => scf.ForeignKeyFilter.Text);
+
+
+                var filters = await sortedQuery
                     .Select(scf => new
                     {
                         SubCategoryFilterId = scf.Id,
                         Filter = scf.ForeignKeyFilter.ToDto()
                     })
-                    .Distinct()
                     .Skip(offset)
                     .Take(limit)
                     .ToListAsync();
 
-                var result = filters.Select(f => new
-                {
-                    SubCategoryFilterId = f.SubCategoryFilterId,
-                    Filter = f.Filter
-                });
-
-                return Results.Ok(result);
+                return Results.Ok(filters);
             });
 
 
-        }
-
-        private static string NormalizeSearchTerm(string term)
-        {
-            term = term.Replace("'", " ");
-
-            term = term.Replace(" ", string.Empty);
-
-            return term.ToLower();
         }
     }
 }
