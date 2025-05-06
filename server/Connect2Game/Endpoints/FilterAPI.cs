@@ -51,10 +51,10 @@ namespace Connect2Game.Endpoints
                 // Fetch and filter the filters from the database
                 var filters = await dbContext.subCategoriesFilter
                     .Where(scf => scf.ForeignKeySubcategory2Id == categoryId)
-                    .Where(scf => NormalizeSearchTerm(scf.ForeignKeyFilter.Text).Contains(normalizedSearchTerm)) 
-                    .OrderByDescending(scf => NormalizeSearchTerm(scf.ForeignKeyFilter.Text).Contains(normalizedSearchTerm)) 
-                    .ThenBy(scf => scf.ForeignKeyFilter.Text.Length) 
-                    .ThenBy(scf => NormalizeSearchTerm(scf.ForeignKeyFilter.Text).IndexOf(normalizedSearchTerm)) 
+                    .Where(scf => EF.Functions.Like(NormalizeSearchTerm(scf.ForeignKeyFilter.Text), $"%{normalizedSearchTerm}%"))
+                    .OrderByDescending(scf => EF.Functions.Like(NormalizeSearchTerm(scf.ForeignKeyFilter.Text), $"%{normalizedSearchTerm}%"))
+                    .ThenBy(scf => scf.ForeignKeyFilter.Text.Length)
+                    .ThenBy(scf => NormalizeSearchTerm(scf.ForeignKeyFilter.Text).IndexOf(normalizedSearchTerm))
                     .Select(scf => new
                     {
                         SubCategoryFilterId = scf.Id,
