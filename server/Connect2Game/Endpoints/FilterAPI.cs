@@ -45,30 +45,27 @@ namespace Connect2Game.Endpoints
 
             filters.MapGet("/filters/subcategoryFilter/{categoryId}/search/{text}", async (ApiDbContext dbContext, string text, int categoryId, int limit = 50, int offset = 0) =>
             {
-
-                var rawWords = text
-                    .ToLower()
-                    .Replace("'", "")          
-                    .Replace("’", "")         
-                    .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                    .ToList();
+                var words = text
+                   .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                   .Select(w => w.ToLower())
+                   .ToList();
 
 
                 var query = dbContext.subCategoriesFilter
                     .Where(scf => scf.ForeignKeySubcategory2Id == categoryId);
 
 
-                foreach (var word in rawWords)
+                foreach (var word in words)
                 {
                     query = query.Where(scf => EF.Functions.Like(
                         scf.ForeignKeyFilter.Text.ToLower(), $"%{word}%"));
                 }
 
+
                 var sortedQuery = query
                     .OrderByDescending(scf => scf.ForeignKeyFilter.Text.ToLower() == text.ToLower())
                     .ThenBy(scf => scf.ForeignKeyFilter.Text.Length)
                     .ThenBy(scf => scf.ForeignKeyFilter.Text);
-
 
                 var filters = await sortedQuery
                     .Select(scf => new
