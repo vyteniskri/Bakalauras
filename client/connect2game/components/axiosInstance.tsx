@@ -55,14 +55,12 @@ const getAccessToken = async (): Promise<string | null> => {
             await AsyncStorage.setItem("userId", userId);
             return accessToken;
           } else {
-            Alert.alert("Error", "Failed to decode token. Please log in again.");
             return null;
           }
         }
         return null;
       } catch (error: any) {
         if (error.response?.status === 422) {
-          Alert.alert("Session Expired", "Please log in again.");
           await AsyncStorage.clear(); 
           if (refreshApp) {
             refreshApp(); 

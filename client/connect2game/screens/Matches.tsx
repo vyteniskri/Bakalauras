@@ -61,7 +61,7 @@ const Matches = ({ navigation }: { navigation: any }) => {
     
     const [searchedFriend, setSearchedFriend] = useState<any>(null); 
     const [searchedNonFriend, setSearchedNonFriend] = useState<any>(null);
-
+   
 
     const searchProfiles = async (query: string) => {
       try {
@@ -319,7 +319,7 @@ const Matches = ({ navigation }: { navigation: any }) => {
         fetchPendingFriends(0);
         setIsFriendsExpanded(false); 
         setIsPendingExpanded(false); 
-
+      
       } 
 
       return () => {
@@ -332,6 +332,7 @@ const Matches = ({ navigation }: { navigation: any }) => {
         setHasMorePendingFriends(true); 
         setIsFriendsExpanded(false); 
         setIsPendingExpanded(false);
+       
       };
     }, [])
   );
@@ -384,15 +385,12 @@ const Matches = ({ navigation }: { navigation: any }) => {
           setSearchedNonFriend(null);
           setPagePendingFriends((prevPage) => Math.max(0, prevPage - 1));
           fetchPendingFriends(Math.max(0, pageCurrentFriends - 1));
-          
-          setCurrentFriends((prevFriends) => {
-            if (!prevFriends.some((friend) => friend.userId === profile.userId)) {
-              return [...prevFriends, { ...profile, isFriendship: true }];
-            }
-            return prevFriends;
-          });
+
+          fetchCurrentFriends(Math.max(0, pageCurrentFriends - 1));
         } catch (error) {
           
+        } finally {
+          fetchCurrentFriends(Math.max(0, pageCurrentFriends - 1));
         }
       }
     };
@@ -480,12 +478,12 @@ const Matches = ({ navigation }: { navigation: any }) => {
 
 
           </View>
-        {(loadingWhole1 || loadingWhole2) || searching ? (
+        { loadingCurrentFriends || (loadingWhole1 || loadingWhole2) || searching ? (
           <View style={styles2.loadingContainer}>
             <ActivityIndicator size="large" color={PRIMARY_COLOR} />
           </View>
 
-        ) : currentFriends.length === 0 && pendingFriends.length === 0 ? (
+        ) : currentFriends.length === 0 && pendingFriends.length === 0 && !loadingCurrentFriends  ? (
     
             <Text style={styles2.noFriendsText}>No friends? Go find some!</Text>
         

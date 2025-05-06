@@ -62,7 +62,7 @@ const Edit = ({ navigation, route }: { navigation: any; route: any }) => {
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery);
   const [numberOfSelectedFilters, setNumberOfSelectedFilters] = useState(0); 
   const [resetFilters, setResetFilters] = useState(true); 
-
+  const [wait, setWait] = useState(false);
 
   const handleUpdateInformationField = async () => {
 
@@ -635,7 +635,7 @@ useEffect(() => {
       flatListRef.current.scrollToOffset({ animated: false, offset: 0 });
     }
     if (debouncedSearchQuery.trim() === "") {
-      setFilters([]); 
+      setFilters((prevFilters) => prevFilters.filter(f => f.isSelected));
     }
   }, [debouncedSearchQuery]);
 
@@ -679,20 +679,32 @@ useEffect(() => {
                   ),
                 }));
 
-                if (searchOffset === 0) {
-                  setFilters(flaggingSelectedFilters);
-                } else {
-                  setFilters((prevFilters) => {
-                    const uniqueFilters = flaggingSelectedFilters.filter(
-                      (newFilter) =>
-                        !prevFilters.some(
-                          (existingFilter) => existingFilter.text === newFilter.text
-                        )
+                setFilters((prevFilters) => {
+                  const selectedStillNeeded = prevFilters.filter(f => f.isSelected);
+                
+                  const mergedFilters = flaggingSelectedFilters.map((newFilter) => {
+                    const existingFilter = selectedStillNeeded.find(
+                      (prevFilter) =>
+                        prevFilter.subCategoryFilterId === newFilter.subCategoryFilterId
                     );
-                    return [...prevFilters, ...uniqueFilters];
-                  }); 
-          
-                }
+                    return existingFilter
+                      ? { ...newFilter, isSelected: existingFilter.isSelected }
+                      : newFilter;
+                  });
+                
+                  const uniqueNewFilters = mergedFilters.filter(
+                    (newFilter) =>
+                      !selectedStillNeeded.some(
+                        (existingFilter) =>
+                          existingFilter.subCategoryFilterId === newFilter.subCategoryFilterId
+                      )
+                  );
+                
+                  return searchOffset === 0
+                    ? [...selectedStillNeeded, ...uniqueNewFilters]
+                    : [...prevFilters, ...uniqueNewFilters];
+                });
+                
 
                 if (searchResults.length < limit) {
                   setHasMoreFilters(false);
@@ -816,14 +828,30 @@ useEffect(() => {
           ),
         }));
 
-        setNumberOfSelectedFilters(
-          storedFilters.filter(
-            (storedFilter) => storedFilter.subCategory === subCategory.title
-          ).length
-        );
 
-    
-      setFilters(updatedFilters); 
+          const storedFiltersForSubCategory = storedFilters
+          .filter((storedFilter) => storedFilter.subCategory === subCategory.title)
+          .map((storedFilter) => ({
+            ...storedFilter,
+            subCategoryFilterId: storedFilter.subCategoryFilterId,
+            subCategoryFilterTitle: subCategory.subCategory, 
+            text: storedFilter.filter,
+            isSelected: true, 
+          }));
+
+          const filteredUpdatedFilters = updatedFilters.filter(
+            (filter) =>
+              !storedFiltersForSubCategory.some(
+                (storedFilter) =>
+                  storedFilter.subCategoryFilterId === filter.subCategoryFilterId
+              )
+          );
+
+       const finalFilters = [...storedFiltersForSubCategory, ...filteredUpdatedFilters];
+
+        setNumberOfSelectedFilters(storedFiltersForSubCategory.length);
+
+        setFilters(finalFilters);
     } catch (error) {
 
     } finally {
@@ -886,7 +914,7 @@ useEffect(() => {
       
         return;
       }
-  
+      setWait(true);
       const token = await AsyncStorage.getItem("accessToken");
   
       if (token) {
@@ -950,11 +978,11 @@ useEffect(() => {
           JSON.stringify(updatedFilters)
         );
 
-
+        setWait(false);
       }
     } catch (error) {
     
-    }
+    } 
   };
 
   const toggleVisibility = async (subCategory) => {
@@ -1244,12 +1272,17 @@ useEffect(() => {
         </ScrollView>
       </KeyboardAvoidingView>
     </Modal>
-
+      
       <Modal
           visible={isModalVisible}
           animationType="slide"
           transparent={true}
-          onRequestClose={() => {setIsModalVisible(false);  setSearchQuery("");  setSelectedFilters([]);}}
+          onRequestClose={() => {
+            if (wait) return; 
+            setIsModalVisible(false);
+            setSearchQuery("");
+            setSelectedFilters([]);
+          }}
         >
           <View style={styles.modalContainer}>
             <>
@@ -1257,6 +1290,7 @@ useEffect(() => {
                 <TouchableOpacity
                   style={styles.closeButton}
                   onPress={() => {
+                    if (wait) return; 
                     setSelectedFilters([]); 
                     setIsModalVisible(false); 
                     setSearchQuery("");
@@ -1274,6 +1308,7 @@ useEffect(() => {
                 <TouchableOpacity
                   style={styles.doneButton}
                   onPress={() => {
+                    if (wait) return; 
                     setIsModalVisible(false);
                     setDefaultOffset(0);
                     updateFiltersInDatabase();
@@ -1313,7 +1348,7 @@ useEffect(() => {
                 />
               ) : ("")}
 
-              {!loadingFilters ? (
+              {!loadingFilters && !wait ? (
                 <FlatList
                 ref={flatListRef} 
                 data={filters} 
