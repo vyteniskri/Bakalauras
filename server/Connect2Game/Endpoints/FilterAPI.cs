@@ -16,13 +16,26 @@ namespace Connect2Game.Endpoints
 
             filters.MapGet("/filters/search/{text}", async (ApiDbContext dbContext, string text, int page = 1, int pageSize = 30) =>
             {
-                var filters = await dbContext.filters
-                    .Where(f => f.Text.ToLower().Contains(text.ToLower()))
-                    .OrderByDescending(f => f.Text.ToLower() == text.ToLower()) 
-                    .ThenBy(f => f.Text.ToLower().IndexOf(text.ToLower())) 
-                    .ThenBy(f => f.Text)
-                    .Skip((page - 1) * pageSize) 
-                    .Take(pageSize) 
+                var words = text
+                  .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                  .Select(w => w.ToLower())
+                  .ToList();
+
+                var query = dbContext.filters.AsQueryable();
+
+                foreach (var word in words)
+                {
+                    query = query.Where(f => EF.Functions.Like(f.Text.ToLower(), $"%{word}%"));
+                }
+
+                var sortedQuery = query
+                    .OrderByDescending(f => f.Text.ToLower() == text.ToLower())
+                    .ThenBy(f => f.Text.Length)
+                    .ThenBy(f => f.Text);
+
+                var filters = await sortedQuery
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
                     .Select(f => f.ToDto())
                     .ToListAsync();
 
