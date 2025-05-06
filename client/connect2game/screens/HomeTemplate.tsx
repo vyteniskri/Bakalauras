@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { View, ImageBackground, ActivityIndicator, StyleSheet, Text } from "react-native";
 import Swiper from "react-native-deck-swiper";
 import { CardItem } from "../components";
@@ -7,6 +7,7 @@ import { fetchProfileData } from "../components/UserProfileData";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { manageFriends } from "../components/ManageFriends";
 import axiosInstance from "../components/axiosInstance";
+import { useFocusEffect } from "@react-navigation/native";
 
 
 const Home =  ({ navigation, route }: { navigation: any; route: any }) => {
@@ -17,6 +18,7 @@ const Home =  ({ navigation, route }: { navigation: any; route: any }) => {
  const [modalVisible, setModalVisible] = useState(false); 
 const [activated, setActivated] = useState(0); 
   const [noContect, setNoContact] = useState(false); 
+
 
 const fetchProfiles = async (timesLooped: number = 0) => {
   try {

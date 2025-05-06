@@ -173,7 +173,6 @@ const Login = ({ navigation, route, onLoginSuccess }: { navigation: any; route: 
                   navigation.navigate("AboutIntro");
                 } catch (postError) {
 
-                  Alert.alert("Error", "Failed to initialize registration step. Please try again.");
                 }
               } else {
 

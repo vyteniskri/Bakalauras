@@ -83,7 +83,12 @@ const SelectCategoriesIntro = ({ navigation, route }: { navigation: any; route: 
       for (const subCategoryFilter of selectedSubCategoryFilters) {
         await axiosInstance.post(`/profileFilters/${subCategoryFilter.id}`, null);
       }
-
+      if (selectedSubCategoryFilters.length > 0) {
+        await axiosInstance.post(
+          `/subCategoriesProfile/1`,
+            null
+        );
+      }
       try {
         await axiosInstance.put(
           `/registrationSteps`,

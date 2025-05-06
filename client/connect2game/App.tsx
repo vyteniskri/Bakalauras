@@ -24,6 +24,7 @@ const App = () => {
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0); 
+  const [homeKey, setHomeKey] = useState(0);
 
 
   useEffect(() => {
@@ -39,9 +40,9 @@ const App = () => {
       }
     };
     fetchToken();
-  }, [refreshKey]); 
-  
-  if (loading) {
+  }, [refreshKey, homeKey]); 
+
+  if (!token && loading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" color={PRIMARY_COLOR} />
@@ -58,7 +59,7 @@ const App = () => {
       }}
     >
       <Stack.Navigator>
-      { !token && (
+      { !token  && (
           <Stack.Screen
           name="Introduction"
           component={Introduction}
@@ -82,7 +83,7 @@ const App = () => {
             headerLeft: () => null,
             headerRight: () => (
               <View style={{ flexDirection: "row" }}>
-                {token === null && (
+                {token === null && !loading && (
                   <View style={{ paddingTop: 10, paddingRight: 15 }}>
                     <TouchableOpacity
                       style={{
@@ -141,28 +142,33 @@ const App = () => {
                   ),
                   headerShown: false,
                 }}
+               
+                 listeners={{ tabPress: () => setHomeKey(prev => prev + 1) }}
               >
-                {(props) => (
-                  <PreviewWrapper
-                    imageWidth={400}
-                    imageHeight={400} 
-                    isLoggedIn={token} 
-                    previewImages={[
-                      require("./preview/Match1.png"),
-                      require("./preview/Match2.png"),
-                    ]}
-                    previewText={
-                      <Text>
-                        Discover and connect with other gamers. <Text style={{ fontWeight: "bold", color: PRIMARY_COLOR }}>Join Now!</Text>
-                      </Text>
-                    }
-                  >
-                    <>
-                      <HomeTemplate {...props} />
-                      <FloatingSearchBar />
-                    </>
-                  </PreviewWrapper>
-                )}
+               {(props) =>
+                  !loading && ( 
+                    <PreviewWrapper
+                      imageWidth={400}
+                      imageHeight={400}
+                      isLoggedIn={token}
+                      previewImages={[
+                        require("./preview/Match1.png"),
+                        require("./preview/Match2.png"),
+                      ]}
+                      previewText={
+                        <Text>
+                          Discover and connect with other gamers.{" "}
+                          <Text style={{ fontWeight: "bold", color: PRIMARY_COLOR }}>Join Now!</Text>
+                        </Text>
+                      }
+                    >
+                      <>
+                        <HomeTemplate {...props} />
+                        <FloatingSearchBar />
+                      </>
+                    </PreviewWrapper>
+                  )
+                }
               </Tab.Screen>
               <Tab.Screen
                   name="Friends"
