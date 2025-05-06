@@ -45,31 +45,39 @@ namespace Connect2Game.Endpoints
 
             filters.MapGet("/filters/subcategoryFilter/{categoryId}/search/{text}", async (ApiDbContext dbContext, string text, int categoryId, int limit = 50, int offset = 0) =>
             {
-                var filters = await dbContext.subCategoriesFilter
-                    .Where(scf => scf.ForeignKeySubcategory2Id == categoryId &&
-                        scf.ForeignKeyFilter.Text.ToLower().Contains(text.ToLower()))
-                     .OrderByDescending(scf => scf.ForeignKeyFilter.Text.ToLower() == text.ToLower()) 
-                     .ThenBy(scf => scf.ForeignKeyFilter.Text.Length) 
-                     .ThenBy(scf => scf.ForeignKeyFilter.Text.ToLower().IndexOf(text.ToLower())) 
-                     .ThenBy(scf => scf.ForeignKeyFilter.Text) 
-                     .Select(scf => new
-                     {
-                         SubCategoryFilterId = scf.Id,
-                         Filter = scf.ForeignKeyFilter.ToDto()
-                     })
-                     .Distinct()
-                     .Skip(offset)
-                     .Take(limit)
-                     .ToListAsync();
+                var words = text
+                   .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                   .Select(w => w.ToLower())
+                   .ToList();
 
 
-                var result = filters.Select(f => new
+                var query = dbContext.subCategoriesFilter
+                    .Where(scf => scf.ForeignKeySubcategory2Id == categoryId);
+
+
+                foreach (var word in words)
                 {
-                    SubCategoryFilterId = f.SubCategoryFilterId,
-                    Filter = f.Filter
-                });
+                    query = query.Where(scf => EF.Functions.Like(
+                        scf.ForeignKeyFilter.Text.ToLower(), $"%{word}%"));
+                }
 
-                return Results.Ok(result);
+
+                var sortedQuery = query
+                    .OrderByDescending(scf => scf.ForeignKeyFilter.Text.ToLower() == text.ToLower())
+                    .ThenBy(scf => scf.ForeignKeyFilter.Text.Length)
+                    .ThenBy(scf => scf.ForeignKeyFilter.Text);
+
+                var filters = await sortedQuery
+                    .Select(scf => new
+                    {
+                        SubCategoryFilterId = scf.Id,
+                        Filter = scf.ForeignKeyFilter.ToDto()
+                    })
+                    .Skip(offset)
+                    .Take(limit)
+                    .ToListAsync();
+
+                return Results.Ok(filters);
             });
 
 
