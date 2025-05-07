@@ -8,7 +8,9 @@ const Message = ({ image, lastMessage, name }: MessageT) => (
     <Image source={{uri: image}} style={styles.avatar} />
     <View>
       <Text>{name}</Text>
-      <Text style={styles.message}>{lastMessage}</Text>
+      <Text style={styles.message} numberOfLines={3} ellipsizeMode="tail">
+           {lastMessage}
+      </Text>
     </View>
   </View>
 );

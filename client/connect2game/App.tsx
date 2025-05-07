@@ -143,7 +143,13 @@ const App = () => {
                   headerShown: false,
                 }}
                
-                 listeners={{ tabPress: () => setHomeKey(prev => prev + 1) }}
+                listeners={{
+                  tabPress: (e) => {
+                    if (token) {
+                      setHomeKey((prev) => prev + 1);
+                    }
+                  },
+                }}
               >
                {(props) =>
                   !loading && ( 
@@ -305,7 +311,11 @@ const App = () => {
           {(props) => (
             <MannageAccount
               {...props}
-              onAccountUpdate={() => setRefreshKey((prev) => prev + 1)} 
+              onAccountUpdate={() => {
+                AsyncStorage.removeItem("accessToken").then(() => {
+                  setRefreshKey((prev) => prev + 1);
+                });
+              }}
             />
           )}
         </Stack.Screen>
