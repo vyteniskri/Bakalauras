@@ -96,8 +96,10 @@ const Notification = ({ visible, onClose }: { visible: boolean; onClose: () => v
               </TouchableOpacity>
               <Text style={styles.title}>Warning</Text>
               {warnings?.text ? (
-                <View style={{ alignItems: "center", backgroundColor: WHITE, padding: 10, borderRadius: 5 }}>
-                  <Text style={styles.notificationText}>Time Remaining: <Text style={styles.notificationTime}>{countdown}</Text></Text>
+                <View style={{ backgroundColor: WHITE, padding: 10, borderRadius: 5 }}>
+                  <View style={{alignItems: "center"}}>
+                    <Text style={styles.notificationText}>Time Remaining: <Text style={styles.notificationTime}>{countdown}</Text></Text>
+                  </View>
                   <Text style={styles.notificationText}>{warnings.text}</Text>
                 </View>
               ) : (

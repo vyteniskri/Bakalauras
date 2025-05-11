@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -65,6 +66,23 @@ namespace Connect2Game.Endpoints
                 await dbContext.SaveChangesAsync();
 
                 return Results.NoContent();
+            });
+
+            warnings.MapPut("/warnings/{foreignKey}", [Authorize] async (int foreignKey, ApiDbContext dbContext, HttpContext httpContext) =>
+            {
+                var warning = await dbContext.warnings.FirstOrDefaultAsync(c => c.Id == foreignKey);
+
+                if (warning == null)
+                {
+                    return Results.NotFound();
+                }
+
+                warning.Clicked = true;
+
+                dbContext.warnings.Update(warning);
+                await dbContext.SaveChangesAsync();
+
+                return Results.Ok();
             });
 
         }

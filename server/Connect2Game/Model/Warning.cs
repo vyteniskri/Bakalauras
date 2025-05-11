@@ -11,6 +11,8 @@ namespace Connect2Game.Model
         [Required]
         public DateTimeOffset CreationDate { get; set; }
 
+        public bool Clicked { get; set; } = false;
+
         [Required]
         public String Text { get; set; }
 
@@ -20,7 +22,7 @@ namespace Connect2Game.Model
 
         public WarningDto ToDto()
         {
-            return new WarningDto(Id, Report.Id, Text, CreationDate);
+            return new WarningDto(Id, Report.Id, Text, CreationDate, Clicked);
         }
     }
 }
