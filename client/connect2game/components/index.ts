@@ -4,4 +4,5 @@ export { default as Message } from "./Message";
 export { default as ProfileItem } from "./ProfileItem";
 export { default as OptionalCategory } from "./OptionalCategory";
 export { default as FloatingSearchBar } from "./FloatingSearchBar";
+export { default as Notification } from "./Notification";
 

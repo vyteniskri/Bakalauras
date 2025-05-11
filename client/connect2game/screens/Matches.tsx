@@ -478,7 +478,7 @@ const Matches = ({ navigation }: { navigation: any }) => {
 
 
           </View>
-        { loadingCurrentFriends || (loadingWhole1 || loadingWhole2) || searching ? (
+        { (loadingCurrentFriends && currentFriends.length == 0) || (loadingWhole1 || loadingWhole2) || searching ? (
           <View style={styles2.loadingContainer}>
             <ActivityIndicator size="large" color={PRIMARY_COLOR} />
           </View>
@@ -492,7 +492,7 @@ const Matches = ({ navigation }: { navigation: any }) => {
          
          <><View style={[
                 styles2.containerFriends,
-                isFriendsExpanded ? { paddingBottom: 60 } : { paddingBottom: 0, },
+                isFriendsExpanded ? { paddingBottom: 60 } : { paddingBottom: 0, }
               ]}>
                 {(currentFriends.length > 0 && !searchQuery) || (searchedFriend && !searching) ? (
                   <View>
