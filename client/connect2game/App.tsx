@@ -4,12 +4,12 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Matches, Profile, Login, Introduction, Register, HomeTemplate, AboutIntro, 
   MediaIntro, SelectCategoriesIntro, AvatarIntro, PlatformIntro, SchedulePlaystile, GameIntro, Edit, Search, FilteredProfiles, FriendsMessages, Messaging, ResetPassword } from "./screens";
-import { PRIMARY_COLOR, DARK_GRAY, WHITE, BLACK } from "./assets/styles";
+import styles, { PRIMARY_COLOR, DARK_GRAY, WHITE, BLACK } from "./assets/styles";
 import TabBarIcon from "./components/TabBarIcon";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { View, Text, TouchableOpacity, ActivityIndicator, Image, KeyboardAvoidingView, Platform, Linking, LogBox } from "react-native";
 import { OptionalCategory, FloatingSearchBar, Notification, Icon } from "./components";
-import { setNavigation } from "./components/axiosInstance";
+import axiosInstance, { setNavigation } from "./components/axiosInstance";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -26,9 +26,40 @@ const App = () => {
   const [refreshKey, setRefreshKey] = useState(0); 
   const [homeKey, setHomeKey] = useState(0);
   const [notificationsVisible, setNotificationsVisible] = useState(false); 
+  const [clicked, setClicked] = useState(true);
+  const [warning, setWarning] = useState<any>(null);
 
-  const toggleNotifications = () => {
+
+  useEffect(() => {
+    const fetchWarnings = async () => {
+      try {
+        const reportsResponse = await axiosInstance.get(`/reports/Once`);
+        const reportId = reportsResponse.data.id;
+
+        const warningsResponse = await axiosInstance.get(`warnings/${reportId}`);
+        const warningData = warningsResponse.data;
+
+        const clicked = warningData.clicked;
+        setClicked(clicked);
+        setWarning(warningData);
+      } catch (error) {
+      }
+    };
+
+    fetchWarnings();
+  }, [refreshKey, homeKey]);
+
+  const toggleNotifications = async () => {
     setNotificationsVisible((prev) => !prev); 
+
+    if (!clicked) {
+      try {
+
+        axiosInstance.put(`/warnings/${warning.id}`);
+        setClicked(true); 
+      } catch (error) {
+      }
+    }
   };
 
   useEffect(() => {
@@ -124,6 +155,9 @@ const App = () => {
                      }} onPress={toggleNotifications}>
  
                      <Icon type="FontAwesome5" name="bell" size={30} color={WHITE} />
+                     {!clicked && (
+                        <View style={styles.Circle} />
+                      )}
                   </TouchableOpacity>
                 )}
               </View>
