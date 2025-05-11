@@ -27,6 +27,8 @@ namespace Connect2Game.Model
         public DbSet<SubCategoryProfile> subCategoriesProfile { get; set; }
         public DbSet<Report> reports { get; set; }
 
+        public DbSet<Warning> warnings { get; set; }
+
         public ApiDbContext(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -41,7 +43,7 @@ namespace Connect2Game.Model
             }
         }
 
-        //// Add this constructor for testing with DbContextOptions
+        // Add this constructor for testing with DbContextOptions
         //public ApiDbContext(DbContextOptions<ApiDbContext> options) : base(options)
         //{
         //}
@@ -162,6 +164,11 @@ namespace Connect2Game.Model
                .HasForeignKey(p => p.ForeignKeyProfileId)
                .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Warning>()
+               .HasOne(p => p.Report)
+               .WithMany()
+               .HasForeignKey(p => p.ForeignKeyReportId)
+               .OnDelete(DeleteBehavior.Cascade);
         }
 
     }

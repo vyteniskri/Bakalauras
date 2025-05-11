@@ -65,7 +65,7 @@ namespace Connect2Game.Auth
                     SameSite = SameSiteMode.None, //SameSiteMode.None // Lax
                     Expires = expiresAt,
                     Secure = true
-                    //Secure = true
+                    //Secure = false
                 };
 
                 httpContext.Response.Cookies.Append("RefreshToken", refreshToken, coockieOptions);

@@ -10,6 +10,7 @@ const RemoveProfiles = () => {
   const [loadingFilters, setLoadingFilters] = useState(false);
   const profilesPerPage = 5; 
   const [totalProfiles, setTotalProfiles] = useState(0); 
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleInvalidateSessions = async (userId: string) => {
     try {
@@ -17,7 +18,6 @@ const RemoveProfiles = () => {
 
     } catch (error) {
       console.error("Error invalidating sessions:", error);
-     // alert("Failed to invalidate user sessions.");
     }
   };
 
@@ -177,6 +177,27 @@ const RemoveProfiles = () => {
     }
   };
 
+
+  const handleSearch = async (query: string) => {
+    if (query.trim() === "") {
+      setProfiles([]);
+      setCurrentPage(1);
+      fetchProfiles(currentPage);
+      return;
+    }
+  
+    try {
+      const response = await api.get(`/profiles/search/${query}`);
+      const filteredProfiles = response.data.filter(
+        (profile: any) => profile.username !== "Admin" && profile.username !== "Moderator"
+      );
+      setProfiles(filteredProfiles); 
+    } catch (error) {
+      console.error("Error searching profiles:", error);
+      setProfiles([]); 
+    }
+  };
+
   useEffect(() => {
     fetchProfiles(currentPage);
   }, [currentPage]);
@@ -192,6 +213,18 @@ const RemoveProfiles = () => {
     <div className="container">
       <div className="reports-table">
         <h1 className="title">Manage Profiles</h1>
+        <div className="search-bar">
+            <input
+              type="text"
+              placeholder="Search by username..."
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value); 
+                handleSearch(e.target.value); 
+              }}
+              className="search-input"
+            />
+          </div>
         <table className="table">
           <thead>
             <tr>
@@ -225,7 +258,8 @@ const RemoveProfiles = () => {
             )}
           </tbody>
         </table>
-        <div className="pagination">
+        {searchQuery === "" && (
+          <div className="pagination">
           <button
             className="pagination-btn pagination-btn-prev"
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -242,6 +276,7 @@ const RemoveProfiles = () => {
             Next &rarr;
           </button>
         </div>
+          )}
       </div>
 
       <div className="user-profile">
