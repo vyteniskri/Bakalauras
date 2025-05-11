@@ -13,6 +13,57 @@ const Reports = () => {
   const reportsPerPage = 7;
   const [page, setPage] = useState(false);
 
+
+  const [isWarningModalOpen, setIsWarningModalOpen] = useState(false);
+  const [messageText, setMessageText] = useState("");
+  const [selectedReportIdForWarning, setSelectedReportIdForWarning] = useState<number | null>(null);
+  const [warnings, setWarnings] = useState<{ [key: number]: { hasWarning: boolean; creationDate?: string, text?: string } }>({});
+
+  const openMessageModal = (reportId: number) => {
+    setSelectedReportIdForWarning(reportId);
+    setIsWarningModalOpen(true);
+  };
+
+  const closeMessageModal = () => {
+    setSelectedReportIdForWarning(null);
+    setMessageText("");
+    setIsWarningModalOpen(false);
+  };
+
+  const handleSendMessage = async () => {
+    if (!selectedReportIdForWarning || !messageText.trim()) {
+      alert("Please enter a message.");
+      return;
+    }
+  
+    try {
+      await api.post(`/warnings/${selectedReportIdForWarning}`, { text: messageText });
+      alert("Warning message sent successfully!");
+      closeMessageModal();
+
+      setWarnings((prev) => ({
+        ...prev,
+        [selectedReportIdForWarning]: { hasWarning: true, creationDate: new Date().toISOString(), text: messageText },
+      }));
+    } catch (error) {
+      console.error("Error sending warning message:", error);
+      alert("Failed to send warning message.");
+    }
+  };
+
+  const calculateTimeLeft = (creationDate: string): string => {
+    const warningExpiration = new Date(new Date(creationDate).getTime() + 24 * 60 * 60 * 1000); 
+    const now = new Date();
+    const timeLeft = warningExpiration.getTime() - now.getTime();
+    if (timeLeft <= 0) {
+      return "Expired";
+    }
+  
+    const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+    return `${hours}h ${minutes}m`;
+  };
+
   const handleInvalidateSessions = async (userId: string) => {
     try {
       await api.post(`/invalidate-sessions/${userId}`);
@@ -31,6 +82,21 @@ const Reports = () => {
   
       setReports(reports); 
       setTotalPages(Math.ceil(totalReports / reportsPerPage));
+
+    const warningsInfo: { [key: number]: { hasWarning: boolean; creationDate?: string, text?: string } } = {};
+    for (const report of reports) {
+      try {
+        const warningResponse = await api.get(`/warnings/${report.id}`);
+        warningsInfo[report.id] = {
+          hasWarning: true,
+          creationDate: warningResponse.data.creationDate,
+          text: warningResponse.data.text,
+        };
+      } catch {
+        warningsInfo[report.id] = { hasWarning: false };
+      }
+    }
+    setWarnings(warningsInfo);
     } catch (error) {
       console.error("Error fetching reports:", error);
       alert("Failed to fetch reports.");
@@ -115,7 +181,17 @@ const Reports = () => {
         alert("Invalid ban duration selected.");
         return;
     }
-  
+    
+    const warningInfo = warnings[report.id];
+    if (warningInfo?.hasWarning) {
+      try {
+        await api.delete(`/warnings/${report.id}`);
+      } catch (error) {
+        console.error("Error deleting warning:", error);
+        alert("Failed to delete warning.");
+        return;
+      }
+    }
     const formattedBanTime = banTime.toISOString();
     try {
       await handleInvalidateSessions(Id);
@@ -281,6 +357,7 @@ const Reports = () => {
           <thead>
             <tr>
               <th>ID</th>
+              <th>Time Left</th>
               <th>Ban Time</th>
               <th>Flagged Count</th>
               <th>Last Reported</th>
@@ -290,17 +367,29 @@ const Reports = () => {
           <tbody>
             {reports.map((report: any) => {
               const isBanned = report.banTime && new Date(report.banTime) > new Date();
+              const warningInfo = warnings[report.id];
+              const hasWarning = warningInfo?.hasWarning || false;
+              const timeLeft = hasWarning && warningInfo.creationDate ? calculateTimeLeft(warningInfo.creationDate) : null;
               return (
                 <tr key={report.id}>
                   <td>{report.id}</td>
+                  <td>{timeLeft || "-"}</td>
                   <td>{report.banTime !== "0001-01-01T00:00:00+00:00" ? new Date(report.banTime).toLocaleString() : "-"}</td> 
                   <td>{report.flaggedCount}</td>
                   <td>{new Date(report.creationDate).toLocaleString()}</td> 
                   <td>
+                    {!isBanned && !hasWarning && (
+                      <button
+                        className="btn btn-message"
+                        onClick={() => openMessageModal(report.id)}
+                      >
+                        Warn
+                      </button>
+                    )}
                     {isBanned ? (
 
                       <button
-                        className="btn btn-unban"
+                        className="btn btn-remove"
                         onClick={() => handleUnbanUser(report.id)}
                       >
                         Unban
@@ -316,7 +405,10 @@ const Reports = () => {
                     )}
                     <button
                       className="btn btn-view"
-                      onClick={() => handleViewProfile(report.userId)}
+                      onClick={() => {
+                        handleViewProfile(report.userId);
+                        setSelectedReportIdForWarning(report.id);
+                      }}
                     >
                       View
                     </button>
@@ -353,6 +445,18 @@ const Reports = () => {
                 Next &rarr;
             </button>
             </div>
+
+            {selectedReportIdForWarning && warnings[selectedReportIdForWarning]?.hasWarning ? (
+            <div className="profile-and-warning">
+              <div className="warning-section">
+                <h2 className="title">Warning Sent</h2>
+                  <div>
+                    <p>{warnings[selectedReportIdForWarning].text}</p>
+                  </div>
+              </div>
+            </div>  
+          ) : null}
+
       </div>
 
       <div className="user-profile">
@@ -426,6 +530,29 @@ const Reports = () => {
           <p>Select a user to view their profile.</p>
         )}
       </div>
+
+        {isWarningModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>Send Warning Message </h2>
+            <textarea
+              className="message-textarea"
+              value={messageText}
+              onChange={(e) => setMessageText(e.target.value)}
+              placeholder="Type your message here..."
+              style={{ width: '400px', height: '150px' }} 
+            />
+            <div className="modal-actions">
+              <button className="btn btn-send" onClick={handleSendMessage}>
+                Send
+              </button>
+              <button className="btn btn-cancel" onClick={closeMessageModal}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
   
 
 

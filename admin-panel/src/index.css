@@ -102,6 +102,16 @@ code {
   color: white;
 }
 
+.btn-message {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.btn-send {
+  background-color: #2ecc71;
+  color: white;
+}
+
 /* Modal */
 .modal-overlay {
   position: fixed;
@@ -283,6 +293,70 @@ code {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+
+.profile-and-warning {
+  position: relative; 
+}
+
+
+.warning-section {
+  position: fixed;
+  bottom: 10px;
+  right: 650px;
+  width: 300px;
+  background-color: #f8d7da;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #f5c6cb;
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  word-wrap: break-word;
+  max-height: 200px; 
+  overflow-y: auto; 
+}
+
+.search-bar {
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+
+.suggestions-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.suggestion-item {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background-color: #f0f0f0;
+}
+
 
 @keyframes spin {
   0% {

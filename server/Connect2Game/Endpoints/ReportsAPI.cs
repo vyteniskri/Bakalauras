@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace Connect2Game.Endpoints
@@ -183,6 +184,24 @@ namespace Connect2Game.Endpoints
 
                 return Results.Ok();
 
+            });
+
+            reportsList.MapGet("/reports/Once", async (ApiDbContext dbContext, HttpContext httpContext, UserManager<Profile> userManager) =>
+            {
+                var profile = await userManager.Users.FirstOrDefaultAsync(p => p.Id == httpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub));
+                if (profile == null)
+                {
+                    return Results.NotFound();
+                }
+
+                var report = await dbContext.reports.FirstOrDefaultAsync(c => c.UserId == profile.Id);
+
+                if (report == null)
+                {
+                    return Results.NotFound();
+                }
+
+                return Results.Ok(report.ToDto());
             });
 
         }

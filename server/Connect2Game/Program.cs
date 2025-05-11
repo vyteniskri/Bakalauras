@@ -23,7 +23,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("http://10.0.2.2:8081", "http://10.0.2.2:8082", "https://matchtogamecontrol.netlify.app").AllowCredentials().AllowAnyHeader().AllowAnyMethod(); ///AllowCredentials() added ///ANDROID: http://10.0.2.2:8081
+        policy.WithOrigins("http://10.0.2.2:8081", "http://10.0.2.2:8082", "https://matchtogamecontrol.netlify.app", "http://localhost:3000", "http://localhost:8081").AllowCredentials().AllowAnyHeader().AllowAnyMethod(); ///AllowCredentials() added ///ANDROID: http://10.0.2.2:8081
 
 
     });
@@ -119,6 +119,7 @@ app.AddProfileFilterAPI();
 app.AddRegistrationStepAPI();
 app.AddSubCategoryProfileAPI();
 app.AddReportsAPI();
+app.AddWarningAPI();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -228,5 +229,10 @@ public record SubCategoryProfileDto(int Id, int ForeignKeySubcategory2, String U
 public record ReportDto(int Id, DateTimeOffset BanTime, int FlaggedCount, String UserId, DateTimeOffset CreationDate);
 public record UpdateReportDto(DateTimeOffset BanTime);
 public record CreateReportDto(DateTimeOffset BanTime, int FlaggedCount);
+
+//Warning
+public record WarningDto(int Id, int ForeignKeyReportId, String Text, DateTimeOffset CreationDate);
+public record CreateWarningDto(String Text);
+
 
 public partial class Program { }
