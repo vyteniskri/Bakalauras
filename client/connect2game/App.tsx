@@ -8,7 +8,7 @@ import { PRIMARY_COLOR, DARK_GRAY, WHITE, BLACK } from "./assets/styles";
 import TabBarIcon from "./components/TabBarIcon";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { View, Text, TouchableOpacity, ActivityIndicator, Image, KeyboardAvoidingView, Platform, Linking, LogBox } from "react-native";
-import { OptionalCategory, FloatingSearchBar } from "./components";
+import { OptionalCategory, FloatingSearchBar, Notification, Icon } from "./components";
 import { setNavigation } from "./components/axiosInstance";
 
 const Stack = createStackNavigator();
@@ -25,7 +25,11 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0); 
   const [homeKey, setHomeKey] = useState(0);
+  const [notificationsVisible, setNotificationsVisible] = useState(false); 
 
+  const toggleNotifications = () => {
+    setNotificationsVisible((prev) => !prev); 
+  };
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -113,12 +117,20 @@ const App = () => {
                     </TouchableOpacity>
                   </View>
                 )}
-                
+                {token && (
+                   <TouchableOpacity  
+                   style={{
+                       paddingRight: 20,
+                     }} onPress={toggleNotifications}>
+ 
+                     <Icon type="FontAwesome5" name="bell" size={30} color={WHITE} />
+                  </TouchableOpacity>
+                )}
               </View>
             ),
           })}
         >
-         
+        
           {() => (
             <KeyboardAvoidingView
             style={{ flex: 1 }}
@@ -258,6 +270,12 @@ const App = () => {
                     )}
                   </Tab.Screen>
             </Tab.Navigator>
+                    {notificationsVisible && (
+                      <Notification
+                        visible={notificationsVisible}
+                        onClose={() => setNotificationsVisible(false)}
+                      />
+                    )}
             </KeyboardAvoidingView>
           )}
         </Stack.Screen>
