@@ -11,7 +11,7 @@ import axiosInstance from "./axiosInstance";
 import Icon from "./Icon";
 import { GRAY, PRIMARY_COLOR, WHITE } from "../assets/styles";
 
-const Notification = ({ visible, onClose }: { visible: boolean; onClose: () => void }) => {
+const Notification = ({ visible, onClose, warning }: { visible: boolean; onClose: () => void; warning: any }) => {
   const [loading, setLoading] = useState(true);
   const [warnings, setWarnings] = useState<any>(null);
   const [countdown, setCountdown] = useState<string>("");
@@ -22,16 +22,8 @@ const Notification = ({ visible, onClose }: { visible: boolean; onClose: () => v
         try {
           setLoading(true);
 
-          const reportsResponse = await axiosInstance.get(`/reports/Once`);
-          const reportId = reportsResponse.data.id;
-
-          const warningsResponse = await axiosInstance.get(`warnings/${reportId}`);
-          const warningData = warningsResponse.data;
-
-          setWarnings(warningData);
-
-          if (warningData.creationDate) {
-            const creationDate = new Date(warningData.creationDate).getTime();
+          if (warning.creationDate) {
+            const creationDate = new Date(warning.creationDate).getTime();
             const expirationDate = creationDate + 24 * 60 * 60 * 1000; 
             const now = Date.now();
             const timeRemaining = expirationDate - now;
@@ -56,9 +48,9 @@ const Notification = ({ visible, onClose }: { visible: boolean; onClose: () => v
   }, [visible]);
 
   useEffect(() => {
-    if (warnings?.creationDate) {
+    if (warning?.creationDate) {
       const interval = setInterval(() => {
-        const creationDate = new Date(warnings.creationDate).getTime();
+        const creationDate = new Date(warning.creationDate).getTime();
         const expirationDate = creationDate + 24 * 60 * 60 * 1000;
         const now = Date.now();
         const timeRemaining = expirationDate - now;
@@ -76,7 +68,7 @@ const Notification = ({ visible, onClose }: { visible: boolean; onClose: () => v
 
       return () => clearInterval(interval);
     }
-  }, [warnings]);
+  }, [warning]);
 
   return (
     <Modal
@@ -95,12 +87,12 @@ const Notification = ({ visible, onClose }: { visible: boolean; onClose: () => v
                 <Icon name="close-circle" size={30} color={PRIMARY_COLOR} />
               </TouchableOpacity>
               <Text style={styles.title}>Warning</Text>
-              {warnings?.text ? (
+              {warning?.text ? (
                 <View style={{ backgroundColor: WHITE, padding: 10, borderRadius: 5 }}>
                   <View style={{alignItems: "center"}}>
                     <Text style={styles.notificationText}>Time Remaining: <Text style={styles.notificationTime}>{countdown}</Text></Text>
                   </View>
-                  <Text style={styles.notificationText}>{warnings.text}</Text>
+                  <Text style={styles.notificationText}>{warning.text}</Text>
                 </View>
               ) : (
                 <Text style={styles.notificationText}>You're all good! 😊</Text>

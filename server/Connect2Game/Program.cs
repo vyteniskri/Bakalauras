@@ -231,7 +231,7 @@ public record UpdateReportDto(DateTimeOffset BanTime);
 public record CreateReportDto(DateTimeOffset BanTime, int FlaggedCount);
 
 //Warning
-public record WarningDto(int Id, int ForeignKeyReportId, String Text, DateTimeOffset CreationDate, bool Clicked);
+public record WarningDto(int Id, int ForeignKeyReportId, String Text, DateTimeOffset CreationDate);
 public record CreateWarningDto(String Text);
 
 
