@@ -431,14 +431,4 @@ export default StyleSheet.create({
     marginTop: 200,
     marginLeft: 250
   },
-
-  Circle: {
-    position: "absolute",
-    top: 5,
-    right: 8,
-    width: 10,
-    height: 10,
-    borderRadius: 50,
-    backgroundColor: "rgba(43, 238, 25, 0.96)"
-  },
 });

@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Matches, Profile, Login, Introduction, Register, HomeTemplate, AboutIntro, 
   MediaIntro, SelectCategoriesIntro, AvatarIntro, PlatformIntro, SchedulePlaystile, GameIntro, Edit, Search, FilteredProfiles, FriendsMessages, Messaging, ResetPassword } from "./screens";
-import styles, { PRIMARY_COLOR, DARK_GRAY, WHITE, BLACK } from "./assets/styles";
+import styles, { PRIMARY_COLOR, DARK_GRAY, WHITE, BLACK, GRAY } from "./assets/styles";
 import TabBarIcon from "./components/TabBarIcon";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { View, Text, TouchableOpacity, ActivityIndicator, Image, KeyboardAvoidingView, Platform, Linking, LogBox } from "react-native";
@@ -26,7 +26,6 @@ const App = () => {
   const [refreshKey, setRefreshKey] = useState(0); 
   const [homeKey, setHomeKey] = useState(0);
   const [notificationsVisible, setNotificationsVisible] = useState(false); 
-  const [clicked, setClicked] = useState(true);
   const [warning, setWarning] = useState<any>(null);
 
 
@@ -39,10 +38,9 @@ const App = () => {
         const warningsResponse = await axiosInstance.get(`warnings/${reportId}`);
         const warningData = warningsResponse.data;
 
-        const clicked = warningData.clicked;
-        setClicked(clicked);
         setWarning(warningData);
       } catch (error) {
+        setWarning(null);
       }
     };
 
@@ -50,16 +48,7 @@ const App = () => {
   }, [refreshKey, homeKey]);
 
   const toggleNotifications = async () => {
-    setNotificationsVisible((prev) => !prev); 
-
-    if (!clicked) {
-      try {
-
-        axiosInstance.put(`/warnings/${warning.id}`);
-        setClicked(true); 
-      } catch (error) {
-      }
-    }
+    setNotificationsVisible((prev) => !prev);
   };
 
   useEffect(() => {
@@ -148,16 +137,13 @@ const App = () => {
                     </TouchableOpacity>
                   </View>
                 )}
-                {token && (
+                {token && warning && (
                    <TouchableOpacity  
                    style={{
                        paddingRight: 20,
+
                      }} onPress={toggleNotifications}>
- 
-                     <Icon type="FontAwesome5" name="bell" size={30} color={WHITE} />
-                     {!clicked && (
-                        <View style={styles.Circle} />
-                      )}
+                     <Icon name="warning-outline" size={45} color={"yellow"} />
                   </TouchableOpacity>
                 )}
               </View>
@@ -308,6 +294,7 @@ const App = () => {
                       <Notification
                         visible={notificationsVisible}
                         onClose={() => setNotificationsVisible(false)}
+                        warning={warning}
                       />
                     )}
             </KeyboardAvoidingView>
