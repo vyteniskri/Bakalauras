@@ -15,7 +15,7 @@ namespace TestServer.Tests
 
         public CustomWebApplicationFactory(string dbName = null)
         {
-            _dbName = dbName ?? Guid.NewGuid().ToString(); // Generate unique DB name if not provided
+            _dbName = dbName ?? Guid.NewGuid().ToString(); 
         }
 
 
@@ -23,7 +23,6 @@ namespace TestServer.Tests
         {
             builder.ConfigureServices(services =>
             {
-                // Remove the real DbContext
                 var descriptor = services.SingleOrDefault(
                     d => d.ServiceType == typeof(DbContextOptions<ApiDbContext>));
                 if (descriptor != null)
@@ -34,12 +33,11 @@ namespace TestServer.Tests
                     options.UseInMemoryDatabase(_dbName);
                 });
 
-                // Build service provider and seed test data
                 var sp = services.BuildServiceProvider();
                 using var scope = sp.CreateScope();
                 var db = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
 
-                db.Database.EnsureCreated(); // Ensure the in-memory database is created
+                db.Database.EnsureCreated(); 
 
               
             });

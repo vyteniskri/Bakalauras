@@ -29,7 +29,6 @@ namespace Connect2Game.Tests.Endpoints
         {
             if (dbContext.subCategory2s.Any()) return;
 
-            // Seed ForeignKeyCategory2
             var category2 = new Category2
             {
                 Id = 1,
@@ -38,7 +37,6 @@ namespace Connect2Game.Tests.Endpoints
 
             dbContext.category2s.Add(category2);
 
-            // Seed SubCategory2
             dbContext.subCategory2s.AddRange(
                 new SubCategory2
                 {
@@ -60,10 +58,8 @@ namespace Connect2Game.Tests.Endpoints
         [Fact]
         public async Task GetSubCategoriesByForeignKey_ReturnsSubcategories()
         {
-            // Act
             var response = await _client.GetAsync("/api/subCategories2/1");
 
-            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             var subCategories = await response.Content.ReadFromJsonAsync<List<SubCategory2Dto>>();
@@ -74,20 +70,16 @@ namespace Connect2Game.Tests.Endpoints
         [Fact]
         public async Task GetSubCategoriesByForeignKey_ReturnsNotFound_WhenNoSubcategoriesExist()
         {
-            // Act
             var response = await _client.GetAsync("/api/subCategories2/999");
 
-            // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
         [Fact]
         public async Task GetSubCategoryByTitle_ReturnsSubcategory()
         {
-            // Act
             var response = await _client.GetAsync("/api/subCategories2/Title/SubCategory 1");
 
-            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             var subCategory = await response.Content.ReadFromJsonAsync<SubCategory2>();
@@ -98,20 +90,16 @@ namespace Connect2Game.Tests.Endpoints
         [Fact]
         public async Task GetSubCategoryByTitle_ReturnsNotFound_WhenTitleDoesNotExist()
         {
-            // Act
             var response = await _client.GetAsync("/api/subCategories2/Title/NonExistingTitle");
 
-            // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
         [Fact]
         public async Task GetSubCategoriesById_ReturnsSubcategory()
         {
-            // Act
             var response = await _client.GetAsync("/api/subCategories2/Id/1");
 
-            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             var subCategories = await response.Content.ReadFromJsonAsync<List<SubCategory2Dto>>();
@@ -123,10 +111,8 @@ namespace Connect2Game.Tests.Endpoints
         [Fact]
         public async Task GetSubCategoriesById_ReturnsNotFound_WhenIdDoesNotExist()
         {
-            // Act
             var response = await _client.GetAsync("/api/subCategories2/Id/999");
 
-            // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
     }

@@ -75,14 +75,11 @@ namespace Connect2Game.Tests.Endpoints
         [Fact]
         public async Task GetRegistrationStep_ReturnsOk_WhenStepExists()
         {
-            // Arrange
             var token = await GetAccessTokenAsync("user2");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            // Act
             var response = await _client.GetAsync("/api/registrationSteps");
 
-            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             var registrationStep = await response.Content.ReadFromJsonAsync<RegistrationStepDto>();
             Assert.NotNull(registrationStep);
@@ -92,11 +89,9 @@ namespace Connect2Game.Tests.Endpoints
         [Fact]
         public async Task GetRegistrationStep_ReturnsNotFound_WhenStepDoesNotExist()
         {
-            // Arrange
             var token = await GetAccessTokenAsync("user1");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            // Remove the registration step for this user
             using (var scope = _factory.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
@@ -108,45 +103,36 @@ namespace Connect2Game.Tests.Endpoints
                 }
             }
 
-            // Act
             var response = await _client.GetAsync("/api/registrationSteps");
 
-            // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
         [Fact]
         public async Task PostRegistrationStep_CreatesNewStep()
         {
-            // Arrange
             var token = await GetAccessTokenAsync("user1");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             var dto = new CreatedRegistrationStepDto(2);
 
-            // Act
             var response = await _client.PostAsJsonAsync("/api/registrationSteps", dto);
 
-            // Assert
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
 
         [Fact]
         public async Task PutRegistrationStep_UpdatesExistingStep()
         {
-            // Arrange
             var token = await GetAccessTokenAsync("user2");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             var dto = new UpdatedRegistrationStepDto(3);
 
-            // Act
             var response = await _client.PutAsJsonAsync("/api/registrationSteps", dto);
 
-            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            // Verify the step was updated
             using (var scope = _factory.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();

@@ -29,7 +29,6 @@ namespace Connect2Game.Tests.Auth
         [Fact]
         public async Task CreateSessionAsync_ShouldCreateSession()
         {
-            // Arrange
             var dbContext = CreateDbContext();
             var sessionService = new SessionService(dbContext);
 
@@ -38,10 +37,8 @@ namespace Connect2Game.Tests.Auth
             var refreshToken = "refresh_token_123";
             var expiresAt = DateTime.UtcNow.AddDays(1);
 
-            // Act
             await sessionService.CreateSessionAsync(sessionId, userId, refreshToken, expiresAt);
 
-            // Assert
             var session = await dbContext.Sessions.FindAsync(sessionId);
             Assert.NotNull(session);
             Assert.Equal(userId, session.UserId);
@@ -53,7 +50,6 @@ namespace Connect2Game.Tests.Auth
         [Fact]
         public async Task ExtendSessionAsync_ShouldUpdateSession()
         {
-            // Arrange
             var dbContext = CreateDbContext();
             var sessionService = new SessionService(dbContext);
 
@@ -75,10 +71,8 @@ namespace Connect2Game.Tests.Auth
             var newRefreshToken = "new_refresh_token_456";
             var newExpiresAt = DateTime.UtcNow.AddDays(2);
 
-            // Act
             await sessionService.ExtendSessionAsync(sessionId, newRefreshToken, newExpiresAt);
 
-            // Assert
             var session = await dbContext.Sessions.FindAsync(sessionId);
             Assert.NotNull(session);
             Assert.Equal(newRefreshToken.ToSHA256(), session.LastRefreshToken);
@@ -88,7 +82,6 @@ namespace Connect2Game.Tests.Auth
         [Fact]
         public async Task InvalidateSessionAsync_ShouldRevokeSession()
         {
-            // Arrange
             var dbContext = CreateDbContext();
             var sessionService = new SessionService(dbContext);
 
@@ -101,12 +94,9 @@ namespace Connect2Game.Tests.Auth
                 ExpiredAt = DateTime.UtcNow.AddDays(1),
                 IsRevoked = false
             });
-            await dbContext.SaveChangesAsync();
 
-            // Act
             await sessionService.InvalidateSessionAsync(sessionId);
 
-            // Assert
             var session = await dbContext.Sessions.FindAsync(sessionId);
             Assert.NotNull(session);
             Assert.True(session.IsRevoked);
@@ -117,7 +107,6 @@ namespace Connect2Game.Tests.Auth
         [Fact]
         public async Task IsSessionValidAsync_ShouldReturnTrue_WhenSessionIsValid()
         {
-            // Arrange
             var dbContext = CreateDbContext();
             var sessionService = new SessionService(dbContext);
 
@@ -134,17 +123,14 @@ namespace Connect2Game.Tests.Auth
             });
             await dbContext.SaveChangesAsync();
 
-            // Act
             var isValid = await sessionService.IsSessionValidAsync(sessionId, refreshToken);
 
-            // Assert
             Assert.True(isValid);
         }
 
         [Fact]
         public async Task IsSessionValidAsync_ShouldReturnFalse_WhenSessionIsRevoked()
         {
-            // Arrange
             var dbContext = CreateDbContext();
             var sessionService = new SessionService(dbContext);
 
@@ -161,10 +147,8 @@ namespace Connect2Game.Tests.Auth
             });
             await dbContext.SaveChangesAsync();
 
-            // Act
             var isValid = await sessionService.IsSessionValidAsync(sessionId, refreshToken);
 
-            // Assert
             Assert.False(isValid);
         }
     }
