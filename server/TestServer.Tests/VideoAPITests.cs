@@ -38,13 +38,11 @@ namespace Connect2Game.Tests.Endpoints
         {
             if (dbContext.Users.Any()) return;
 
-            // Seed Users
             var user = new Profile { Id = "user1", UserName = "user1", Email = "user1@example.com" };
             var admin = new Profile { Id = "admin", UserName = "admin", Email = "admin@example.com" };
             await userManager.CreateAsync(user, "TestPassword123!");
             await userManager.CreateAsync(admin, "AdminPassword123!");
 
-            // Seed Videos
             dbContext.Videos.Add(new Video
             {
                 Id = 1,
@@ -71,10 +69,8 @@ namespace Connect2Game.Tests.Endpoints
         [Fact]
         public async Task GetVideosByProfile_ReturnsVideos()
         {
-            // Act
             var response = await _client.GetAsync("/api/videos/profile/user1");
 
-            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             var videos = await response.Content.ReadFromJsonAsync<List<VideoDto>>();
@@ -85,10 +81,8 @@ namespace Connect2Game.Tests.Endpoints
         [Fact]
         public async Task GetVideosByProfile_ReturnsNotFound_WhenNoVideosExist()
         {
-            // Act
             var response = await _client.GetAsync("/api/videos/profile/nonexistentuser");
 
-            // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 

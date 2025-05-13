@@ -47,13 +47,10 @@ namespace Connect2Game.Tests.Endpoints
         [Fact]
         public async Task Register_ReturnsUnprocessableEntity_WhenUsernameTaken()
         {
-            // Arrange
             var dto = new AuthEndpoints.RegisterUserDto("user1", "user1@example.com", "Password123!");
 
-            // Act
             var response = await _client.PostAsJsonAsync("api/register", dto);
 
-            // Assert
             Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
         }
 
@@ -62,26 +59,20 @@ namespace Connect2Game.Tests.Endpoints
         [Fact]
         public async Task Login_ReturnsUnprocessableEntity_WhenUserDoesNotExist()
         {
-            // Arrange
             var dto = new AuthEndpoints.LoginDto("nonexistentuser", "Password123!");
 
-            // Act
             var response = await _client.PostAsJsonAsync("api/login", dto);
 
-            // Assert
             Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
         }
 
         [Fact]
         public async Task Login_ReturnsUnprocessableEntity_WhenPasswordIsInvalid()
         {
-            // Arrange
             var dto = new AuthEndpoints.LoginDto("user1", "WrongPassword");
 
-            // Act
             var response = await _client.PostAsJsonAsync("api/login", dto);
 
-            // Assert
             Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
         }
 
@@ -90,10 +81,10 @@ namespace Connect2Game.Tests.Endpoints
         [Fact]
         public async Task Logout_ReturnsUnprocessableEntity_WhenRefreshTokenIsMissing()
         {
-            // Act
+
             var response = await _client.PostAsync("api/logout", null);
 
-            // Assert
+
             Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
         }
     }

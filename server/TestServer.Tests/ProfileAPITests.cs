@@ -29,13 +29,13 @@ namespace Connect2Game.Tests.Endpoints
         public ProfileApiTests()
         {
             _factory = new CustomWebApplicationFactory(nameof(ProfileApiTests));
-            _client = _factory.CreateClient(); // Assuming TestFixture initializes the HttpClient and the web application
+            _client = _factory.CreateClient(); 
 
             using var scope = _factory.Services.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Profile>>();
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            SeedDatabase(dbContext, userManager, roleManager).Wait(); // Seed data before any test runs
+            SeedDatabase(dbContext, userManager, roleManager).Wait(); 
         }
 
         private async Task<string> GetAccessTokenAsync()
@@ -43,7 +43,7 @@ namespace Connect2Game.Tests.Endpoints
             var loginDto = new
             {
                 UserName = "test2",
-                Password = "TestPassword123!" // must match the seeded test user
+                Password = "TestPassword123!" 
             };
 
             var response = await _client.PostAsJsonAsync("/api/login", loginDto);
@@ -59,7 +59,6 @@ namespace Connect2Game.Tests.Endpoints
         {
             if (!dbContext.Users.Any())
             {
-                // Profiles and roles to be added
                 var profiles = new List<(string Id, string UserName, string Email, string Role)>
                 {
                     ("5", "test", "testuser@example.com", "Admin"),
@@ -87,150 +86,113 @@ namespace Connect2Game.Tests.Endpoints
         [Fact]
         public async Task Get_Profiles_ReturnsOk_WhenAuthorized()
         {
-            // Arrange: Get the token
-            var token = await GetAccessTokenAsync(); // Assuming GetAccessTokenAsync returns a valid JWT token
+            var token = await GetAccessTokenAsync(); 
 
-            // Set the token in the request header for authorization
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            // Act: Make the API request
             var response = await _client.GetAsync("/api/profiles");
 
-            // Assert: Check the response status code
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
 
-        // Test: Get profile by valid profile ID
         [Fact]
         public async Task Get_ProfileById_ReturnsOk()
         {
-            // Arrange
-            var profileId = "5"; // Replace with a valid profile ID in the database
+            var profileId = "5"; 
             var response = await _client.GetAsync($"/api/profiles/{profileId}");
 
-            // Act
             var statusCode = response.StatusCode;
 
-            // Assert
             Assert.Equal(System.Net.HttpStatusCode.OK, statusCode);
         }
 
-        // Test: Get profile by invalid profile ID
         [Fact]
         public async Task Get_ProfileById_ReturnsNotFound()
         {
-            // Arrange
             var profileId = "invalid-profile-id";
             var response = await _client.GetAsync($"/api/profiles/{profileId}");
 
-            // Act
             var statusCode = response.StatusCode;
 
-            // Assert
             Assert.Equal(System.Net.HttpStatusCode.NotFound, statusCode);
         }
 
-        // Test: Update profile with invalid data (username already taken)
         [Fact]
         public async Task Put_UpdateProfile_ReturnsOK()
         {
-            // Arrange: Get the token
-            var token = await GetAccessTokenAsync(); // Assuming GetAccessTokenAsync returns a valid JWT token
+            var token = await GetAccessTokenAsync(); 
 
-            // Set the token in the request header for authorization
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            // Arrange
+
             var dto = new UpdateProfileDto("newUsername");
 
 
             var response = await _client.PutAsJsonAsync("/api/profiles", dto);
 
-            // Act
             var statusCode = response.StatusCode;
 
-            // Assert
             Assert.Equal(System.Net.HttpStatusCode.OK, statusCode);
         }
 
-        // Test: Search profiles by name
         [Fact]
         public async Task Get_ProfileSearch_ReturnsOk()
         {
-            // Arrange
-            var searchTerm = "test"; // Search term based on a profile that exists in the database
+            var searchTerm = "test"; 
             var response = await _client.GetAsync($"/api/profiles/search/{searchTerm}");
 
-            // Act
             var statusCode = response.StatusCode;
 
-            // Assert
             Assert.Equal(System.Net.HttpStatusCode.OK, statusCode);
         }
 
-        // Test: Search profiles by name (no results)
         [Fact]
         public async Task Get_ProfileSearch_ReturnsNotFound()
         {
-            // Arrange
-            var searchTerm = "nonexistentname"; // Search term with no matching profiles
+            var searchTerm = "nonexistentname"; 
             var response = await _client.GetAsync($"/api/profiles/search/{searchTerm}");
 
-            // Act
             var statusCode = response.StatusCode;
 
-            // Assert
             Assert.Equal(System.Net.HttpStatusCode.NotFound, statusCode);
         }
 
-        // Test: Delete profile with invalid authorization (user not admin or not the profile owner)
         [Fact]
         public async Task Delete_Profile_ReturnsUnauthorized()
         {
-            // Arrange
             var profileId = "5";
-            var unauthorizedProfileId = "unauthorized-profile-id"; // A different profile ID to simulate the unauthorized user
+            var unauthorizedProfileId = "unauthorized-profile-id";
 
             var response = await _client.DeleteAsync($"/api/profiles/{profileId}");
 
-            // Act
             var statusCode = response.StatusCode;
 
-            // Assert
             Assert.Equal(System.Net.HttpStatusCode.Unauthorized, statusCode);
         }
 
-        // Test: Get profiles in chunks (valid pagination)
         [Fact]
         public async Task Get_ProfilesChunks_ReturnsOk()
         {
-            // Arrange
             var page = 1;
             var pageSize = 1;
 
             var response = await _client.GetAsync($"/api/profiles/Chunks?page={page}&pageSize={pageSize}");
 
-            // Act
             var statusCode = response.StatusCode;
 
-            // Assert
             Assert.Equal(System.Net.HttpStatusCode.OK, statusCode);
         }
 
-        // Test: Get profiles in chunks (invalid pagination)
         [Fact]
         public async Task Get_ProfilesChunks_ReturnsBadRequest()
         {
-            // Arrange
-            var page = -1; // Invalid page number
+            var page = -1; 
             var pageSize = 5;
 
             var response = await _client.GetAsync($"/api/profiles/Chunks?page={page}&pageSize={pageSize}");
 
-            // Act
             var statusCode = response.StatusCode;
 
-            // Assert
             Assert.Equal(System.Net.HttpStatusCode.BadRequest, statusCode);
         }
 

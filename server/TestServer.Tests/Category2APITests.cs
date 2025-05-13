@@ -21,7 +21,7 @@ namespace Connect2Game.Tests.Endpoints
         public Category2ApiTests()
         {
             _factory = new CustomWebApplicationFactory(nameof(Category2ApiTests));
-            _client = _factory.CreateClient(); // Assuming TestFixture initializes the HttpClient and the web application
+            _client = _factory.CreateClient(); 
 
             using var scope = _factory.Services.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
@@ -33,7 +33,7 @@ namespace Connect2Game.Tests.Endpoints
 
         private async Task SeedDatabase(ApiDbContext dbContext)
         {
-            // Seed some category2s into the database
+
             if (!dbContext.category2s.Any())
             {
                 dbContext.category2s.AddRange(new List<Category2>
@@ -50,52 +50,45 @@ namespace Connect2Game.Tests.Endpoints
         [Fact]
         public async Task Get_Categories2_ReturnsOk()
         {
-            // Act: Make the API request
+
             var response = await _client.GetAsync("/api/categories2");
 
-            // Assert: Check the response status code
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
         [Fact]
         public async Task Get_CategoryById_ReturnsOk_WhenValidId()
         {
-            // Arrange
-            var validId = 1; // Replace with an ID from the seeded data
 
-            // Act: Make the API request
+            var validId = 1; 
+
+   
             var response = await _client.GetAsync($"/api/categories2/Id/{validId}");
 
-            // Assert: Check the response status code
+
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
         [Fact]
         public async Task Get_CategoryById_ReturnsNotFound_WhenInvalidId()
         {
-            // Arrange
-            var invalidId = 9999; // ID that doesn't exist in the database
+            var invalidId = 9999; 
 
-            // Act: Make the API request
             var response = await _client.GetAsync($"/api/categories2/Id/{invalidId}");
 
-            // Assert: Check the response status code
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
         [Fact]
         public async Task Get_CategoryById_ReturnsBadRequest_WhenIdIsInvalid()
         {
-            // Arrange
-            var invalidId = "invalid-id"; // Invalid ID format
 
-            // Act: Make the API request
+            var invalidId = "invalid-id"; 
+
             var response = await _client.GetAsync($"/api/categories2/Id/{invalidId}");
 
-            // Assert: Check the response status code
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
-        // You can add more test cases for other edge cases like empty database, no categories, etc.
     }
 }

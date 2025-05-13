@@ -91,7 +91,6 @@ namespace Connect2Game.Tests.Endpoints
 
             await dbContext.SaveChangesAsync();
 
-            // Debugging: Verify user3 exists in the database
             var report = await dbContext.reports.FirstOrDefaultAsync(r => r.UserId == "user3");
             Console.WriteLine($"user3 report found after seeding: {report?.UserId}, BanTime: {report?.BanTime}");
         }
@@ -109,50 +108,40 @@ namespace Connect2Game.Tests.Endpoints
         [Fact]
         public async Task PostReport_CreatesNewReport()
         {
-            // Arrange
             var dto = new CreateReportDto(DateTimeOffset.UtcNow.AddDays(10), 2);
             var response = await _client.PostAsJsonAsync("/api/reports/flag/user2", dto);
 
-            // Assert
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
 
         [Fact]
         public async Task PutReport_UpdatesBanTime()
         {
-            // Arrange
             var token = await GetAccessTokenAsync("admin", "AdminPassword123!");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             var dto = new UpdateReportDto(DateTimeOffset.UtcNow.AddDays(1));
 
-            // Act
             var response = await _client.PutAsJsonAsync("/api/reports/1", dto);
 
-            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
         [Fact]
         public async Task GetCanLogin_ReturnsForbidden_WhenUserIsBanned()
         {
-            // Arrange
             var response = await _client.GetAsync("/api/reports/canLogin/user3");
 
-            // Assert
             Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
         }
 
         [Fact]
         public async Task FlagReport_IncreasesFlaggedCount()
         {
-            // Act
             var response = await _client.PutAsync("/api/reports/flag/user1", null);
 
-            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            // Verify the flagged count
             using var scope = _factory.Services.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
             var report = await dbContext.reports.FirstOrDefaultAsync(r => r.UserId == "user1");
@@ -163,31 +152,24 @@ namespace Connect2Game.Tests.Endpoints
         [Fact]
         public async Task DeleteReport_RemovesReport()
         {
-            // Arrange
             var token = await GetAccessTokenAsync("admin", "AdminPassword123!");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            // Act
             var response = await _client.DeleteAsync("/api/reports/1");
 
-            // Assert
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
 
         [Fact]
         public async Task InvalidateSessions_SetsSessionsToRevoked()
         {
-            // Arrange
             var token = await GetAccessTokenAsync("admin", "AdminPassword123!");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            // Act
             var response = await _client.PostAsync("/api/invalidate-sessions/user1", null);
 
-            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            // Verify sessions are revoked
             using var scope = _factory.Services.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
             var sessions = await dbContext.Sessions.Where(s => s.UserId == "user1").ToListAsync();

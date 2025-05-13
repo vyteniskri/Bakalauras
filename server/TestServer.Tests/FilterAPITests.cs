@@ -45,7 +45,7 @@ namespace Connect2Game.Tests.Endpoints
         {
             var response = await _client.GetAsync("/api/filters/search/Test");
 
-            response.EnsureSuccessStatusCode(); // Ensures 2xx status code
+            response.EnsureSuccessStatusCode(); 
 
 
         }
@@ -56,7 +56,7 @@ namespace Connect2Game.Tests.Endpoints
         {
             var response = await _client.GetAsync("/api/filters/1");
 
-            response.EnsureSuccessStatusCode(); // Ensures 2xx status code
+            response.EnsureSuccessStatusCode(); 
             var result = await response.Content.ReadFromJsonAsync<FilterDto>();
             Assert.Equal("Test Filter 1", result?.Text);
         }
@@ -67,7 +67,7 @@ namespace Connect2Game.Tests.Endpoints
         {
             var response = await _client.GetAsync("/api/filters/subcategoryFilter/1/search/Test");
 
-            response.EnsureSuccessStatusCode(); // Ensures 2xx status code
+            response.EnsureSuccessStatusCode(); 
         }
 
         [Fact]
@@ -75,10 +75,8 @@ namespace Connect2Game.Tests.Endpoints
         {
             int nonExistentId = 9999;
 
-            // Act: Call the API with an invalid filter ID
           var response = await _client.GetAsync($"/api/filters/{nonExistentId}");
 
-            // Assert: Ensure that the response is a 404 Not Found
             Assert.Equal(System.Net.HttpStatusCode.NotFound, response.StatusCode);
         }
 
@@ -87,7 +85,7 @@ namespace Connect2Game.Tests.Endpoints
         {
             var response = await _client.GetAsync("/api/filters/subcategoryFilter/1/search/SomeText");
 
-            response.EnsureSuccessStatusCode(); // Ensures 2xx status code
+            response.EnsureSuccessStatusCode();
         }
 
 

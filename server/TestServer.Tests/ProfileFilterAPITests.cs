@@ -66,24 +66,19 @@ namespace Connect2Game.Tests.Endpoints
         [Fact]
         public async Task PostProfileFilter_CreatesProfileFilter()
         {
-            // Arrange
             var token = await GetAccessTokenAsync("user1");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            // Act
             var response = await _client.PostAsJsonAsync<object>("/api/profileFilters/1", null);
 
-            // Assert
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
 
         [Fact]
         public async Task GetProfileFilters_ReturnsOk_WhenFiltersExist()
         {
-            // Act
             var response = await _client.GetAsync("/api/profileFilters/user1");
 
-            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             var filters = await response.Content.ReadFromJsonAsync<List<ProfileFilterDto>>();
             Assert.NotNull(filters);
@@ -93,10 +88,8 @@ namespace Connect2Game.Tests.Endpoints
         [Fact]
         public async Task GetProfileFiltersForSubCategory_ReturnsOk_WhenFiltersExist()
         {
-            // Act
             var response = await _client.GetAsync("/api/profileFilters/forSubcategory/1?skip=0&take=9");
 
-            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             var filters = await response.Content.ReadFromJsonAsync<List<ProfileFilterDto>>();
             Assert.NotNull(filters);
@@ -106,28 +99,22 @@ namespace Connect2Game.Tests.Endpoints
         [Fact]
         public async Task DeleteProfileFilter_RemovesFilter()
         {
-            // Arrange
             var token = await GetAccessTokenAsync("user1");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            // Act
             var response = await _client.DeleteAsync("/api/profileFilters/1");
 
-            // Assert
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
 
         [Fact]
         public async Task DeleteProfileFilter_ReturnsNotFound_WhenFilterDoesNotExist()
         {
-            // Arrange
             var token = await GetAccessTokenAsync("user1");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            // Act
             var response = await _client.DeleteAsync("/api/profileFilters/999");
 
-            // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
     }

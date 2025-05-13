@@ -34,7 +34,6 @@ namespace Connect2Game.Tests.Endpoints
         {
             if (dbContext.Users.Any()) return;
 
-            // Seed Users
             var users = new[]
             {
                 new Profile { Id = "user1", UserName = "user1", Email = "user1@example.com" },
@@ -45,15 +44,13 @@ namespace Connect2Game.Tests.Endpoints
                 await userManager.CreateAsync(user, "TestPassword123!");
             }
 
-            // Seed SubCategory2
             var subCategory = new SubCategory2 { Id = 1, Title = "SubCategory 1" };
             dbContext.subCategory2s.Add(subCategory);
 
-            // Seed SubCategoryProfiles
             dbContext.subCategoriesProfile.AddRange(
                 users.Select((user, index) => new SubCategoryProfile
                 {
-                    Id = index + 1, // Automatically increment ID
+                    Id = index + 1, 
                     CreationDate = DateTimeOffset.UtcNow,
                     ForeignKeySubcategory2 = subCategory,
                     UserId = user.Id,
@@ -77,40 +74,32 @@ namespace Connect2Game.Tests.Endpoints
         [Fact]
         public async Task PostSubCategoryProfile_CreatesNewProfile()
         {
-            // Arrange
             var token = await GetAccessTokenAsync("user1");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            // Act
             var response = await _client.PostAsync("/api/subCategoriesProfile/1", null);
 
-            // Assert
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
 
         [Fact]
         public async Task PostSubCategoryProfile_ReturnsNotFound_WhenSubCategoryDoesNotExist()
         {
-            // Arrange
             var token = await GetAccessTokenAsync("user2");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             int number = 999;
 
-            // Act
             var response = await _client.PostAsync($"/api/subCategoriesProfile/{number}", null);
 
-            // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
         [Fact]
         public async Task GetSubCategoryProfilesByUserId_ReturnsProfiles()
         {
-            // Act
             var response = await _client.GetAsync("/api/subCategoriesProfile/userId/user1");
 
-            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             var profiles = await response.Content.ReadFromJsonAsync<List<SubCategoryProfileDto>>();
@@ -121,14 +110,11 @@ namespace Connect2Game.Tests.Endpoints
         [Fact]
         public async Task GetSubCategoryProfilesBySubCategoryId_ReturnsProfiles()
         {
-            // Arrange
             var token = await GetAccessTokenAsync("user1");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            // Act
             var response = await _client.GetAsync("/api/subCategoriesProfile/subId/1");
 
-            // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             var profiles = await response.Content.ReadFromJsonAsync<List<SubCategoryProfileDto>>();
@@ -139,17 +125,13 @@ namespace Connect2Game.Tests.Endpoints
         [Fact]
         public async Task DeleteSubCategoryProfile_RemovesProfile()
         {
-            // Arrange
             var token = await GetAccessTokenAsync("user1");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            // Act
             var response = await _client.DeleteAsync("/api/subCategoriesProfile/1");
 
-            // Assert
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 
-            // Verify the profile is removed
             using var scope = _factory.Services.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
             var profile = await dbContext.subCategoriesProfile.FirstOrDefaultAsync(p => p.Id == 1);
@@ -159,14 +141,11 @@ namespace Connect2Game.Tests.Endpoints
         [Fact]
         public async Task DeleteSubCategoryProfile_ReturnsNotFound_WhenProfileDoesNotExist()
         {
-            // Arrange
             var token = await GetAccessTokenAsync("user1");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            // Act
             var response = await _client.DeleteAsync("/api/subCategoriesProfile/999");
 
-            // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
     }
